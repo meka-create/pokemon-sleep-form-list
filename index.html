@@ -54,7 +54,13 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             padding: 1.25rem;
+            overflow: visible !important;
         }
+
+        .table-responsive {
+            overflow: visible !important;
+        }
+
         .badge-regional { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 600; }
         .badge-mega { background-color: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; font-weight: 600; }
         .badge-gmax { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; font-weight: 600; }
@@ -67,7 +73,6 @@
         .score-1 { background-color: #e2e8f0; color: #334155; }
         .score-0 { background-color: #f1f5f9; color: #64748b; }
         
-        /* フィルターボタン群のスタイル */
         .filter-buttons-wrapper {
             display: flex;
             flex-wrap: wrap;
@@ -81,31 +86,48 @@
             white-space: nowrap;
         }
 
-        /* テーブル設定：1画面に収めるためのCSS */
+        /* テーブル設定：1画面に収める ＆ ヘッダー追従(sticky) */
         #pokemonTable {
             width: 100% !important;
             table-layout: fixed;
             margin: 0 !important;
         }
         table.dataTable thead th {
-            background-color: #f8fafc;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: #f8fafc !important;
             color: #475569;
             font-weight: 700;
-            border-bottom: 2px solid #e2e8f0 !important;
-            padding: 0.5rem 0.25rem !important;
-            font-size: 0.85rem;
+            border-bottom: 2px solid #cbd5e1 !important;
+            padding: 0.5rem 0.15rem !important;
+            font-size: 0.825rem;
+            white-space: nowrap !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
         }
         table.dataTable tbody td {
-            padding: 0.45rem 0.25rem !important;
-            font-size: 0.85rem;
+            padding: 0.45rem 0.15rem !important;
+            font-size: 0.825rem;
         }
         .no-val { color: #cbd5e1; font-weight: 300; }
+
+        /* DataTablesのソート矢印アイコン用余白調整 */
+        table.dataTable thead .sorting,
+        table.dataTable thead .sorting_asc,
+        table.dataTable thead .sorting_desc {
+            padding-right: 0.9rem !important;
+        }
+        table.dataTable thead .sorting:before, table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after {
+            right: 0.1rem !important;
+        }
 
         /* モバイル（スマホ）表示用の最適化スタイル */
         @media (max-width: 576px) {
             .container {
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
+                padding-left: 0.4rem;
+                padding-right: 0.4rem;
             }
             .header-section {
                 padding: 1.25rem 0.5rem 1rem 0.5rem;
@@ -126,7 +148,7 @@
                 opacity: 0.9;
             }
             .card-table {
-                padding: 0.5rem;
+                padding: 0.4rem;
                 border-radius: 12px;
             }
             .card-info-box {
@@ -167,27 +189,27 @@
                 padding-top: 0.5rem;
             }
 
-            /* テーブルの1画面収め（スクロール防止） */
-            .table-responsive {
-                overflow-x: hidden !important; /* 横スクロール無効化 */
+            /* テーブルの見出し・セル最適化 */
+            table.dataTable thead th {
+                font-size: 0.725rem !important;
+                padding: 0.45rem 0.05rem !important;
+                letter-spacing: -0.5px;
             }
-            table.dataTable {
-                font-size: 0.75rem;
-            }
-            table.dataTable th, table.dataTable td {
-                padding: 0.4rem 0.15rem !important;
+            table.dataTable tbody td {
+                font-size: 0.725rem !important;
+                padding: 0.4rem 0.05rem !important;
             }
             .badge-regional, .badge-mega, .badge-gmax {
-                font-size: 0.7rem;
-                padding: 0.2em 0.3em;
+                font-size: 0.675rem;
+                padding: 0.2em 0.25em;
             }
             .badge-score {
-                font-size: 0.75rem;
-                padding: 0.2em 0.35em;
+                font-size: 0.725rem;
+                padding: 0.2em 0.3em;
             }
             .poke-name {
                 word-break: break-all;
-                line-height: 1.2;
+                line-height: 1.25;
                 display: inline-block;
             }
         }
@@ -209,30 +231,10 @@
     <div class="container">
         <!-- 統計カード -->
         <div class="row g-2 g-md-3 mb-3">
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-num">243</div>
-                    <div class="stat-label">実装データ件数</div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-num" style="color: #0369a1;">42</div>
-                    <div class="stat-label">リージョンフォーム対応</div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-num" style="color: #be185d;">83</div>
-                    <div class="stat-label">メガシンカ対応</div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-num" style="color: #b45309;">37</div>
-                    <div class="stat-label">キョダイマックス対応</div>
-                </div>
-            </div>
+            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num">243</div><div class="stat-label">実装データ件数</div></div></div>
+            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #0369a1;">42</div><div class="stat-label">リージョンフォーム対応</div></div></div>
+            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #be185d;">83</div><div class="stat-label">メガシンカ対応</div></div></div>
+            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #b45309;">37</div><div class="stat-label">キョダイマックス対応</div></div></div>
         </div>
 
         <!-- 判定基準 & 点数ルール説明カード -->
@@ -262,7 +264,6 @@
 
         <!-- テーブルメインカード -->
         <div class="card-table">
-            <!-- フィルターボタン群 -->
             <div class="mb-3">
                 <div class="fw-bold mb-1 text-secondary" style="font-size: 0.85rem;">クイック絞り込み:</div>
                 <div class="filter-buttons-wrapper">
@@ -274,16 +275,15 @@
                 </div>
             </div>
 
-            <!-- テーブル -->
             <div class="table-responsive">
                 <table id="pokemonTable" class="table table-hover align-middle">
                     <thead>
                         <tr>
-                            <th style="width: 13%;">No.</th>
-                            <th style="width: 35%;">名前</th>
-                            <th style="width: 14%;" class="text-center">リージョン</th>
-                            <th style="width: 13%;" class="text-center">メガ</th>
-                            <th style="width: 13%;" class="text-center">キョダイ</th>
+                            <th style="width: 10%;">No.</th>
+                            <th style="width: 32%;">名前</th>
+                            <th style="width: 19%;" class="text-center">リージョン</th>
+                            <th style="width: 12%;" class="text-center">メガ</th>
+                            <th style="width: 15%;" class="text-center">キョダイ</th>
                             <th style="width: 12%;" class="text-center">点数</th>
                         </tr>
                     </thead>

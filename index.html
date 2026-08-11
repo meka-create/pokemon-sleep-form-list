@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables Bootstrap 5 CSS -->
     <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,63 +22,42 @@
         .header-section {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: #ffffff;
-            padding: 2.5rem 0 2rem 0;
-            margin-bottom: 2rem;
+            padding: 2rem 0 1.5rem 0;
+            margin-bottom: 1.5rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
         .stat-card {
             background: #ffffff;
             border-radius: 12px;
-            padding: 1rem 1.25rem;
+            padding: 0.85rem 1rem;
             border: 1px solid #e2e8f0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             text-align: center;
             transition: transform 0.2s;
         }
-        .stat-card:hover {
-            transform: translateY(-2px);
+        .stat-card:hover { transform: translateY(-2px); }
+        .stat-num { font-size: 1.6rem; font-weight: 700; color: #2563eb; line-height: 1.2; }
+        .stat-label { font-size: 0.8rem; color: #64748b; font-weight: 500; margin-top: 0.2rem; }
+        
+        .card-info-box {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            border-left: 5px solid #2563eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
-        .stat-num {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #2563eb;
-        }
-        .stat-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            font-weight: 500;
-        }
+
         .card-table {
             background: #ffffff;
             border-radius: 16px;
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
-        .badge-regional {
-            background-color: #e0f2fe;
-            color: #0369a1;
-            border: 1px solid #bae6fd;
-            font-weight: 600;
-        }
-        .badge-mega {
-            background-color: #fce7f3;
-            color: #be185d;
-            border: 1px solid #fbcfe8;
-            font-weight: 600;
-        }
-        .badge-gmax {
-            background-color: #fef3c7;
-            color: #b45309;
-            border: 1px solid #fde68a;
-            font-weight: 600;
-        }
-        .badge-score {
-            font-size: 0.9rem;
-            padding: 0.35em 0.65em;
-            border-radius: 6px;
-            font-weight: 700;
-        }
+        .badge-regional { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 600; }
+        .badge-mega { background-color: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; font-weight: 600; }
+        .badge-gmax { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; font-weight: 600; }
+        .badge-score { font-size: 0.85rem; padding: 0.3em 0.55em; border-radius: 6px; font-weight: 700; }
         .score-6 { background-color: #fecdd3; color: #9f1239; }
         .score-5 { background-color: #fed7aa; color: #9a3412; }
         .score-4 { background-color: #fef08a; color: #854d0e; }
@@ -88,23 +66,91 @@
         .score-1 { background-color: #e2e8f0; color: #334155; }
         .score-0 { background-color: #f1f5f9; color: #64748b; }
         
+        /* フィルターボタン群のレスポンシブ横スクロール設定 */
+        .filter-buttons-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
         .filter-btn {
             border-radius: 20px;
-            padding: 0.4rem 1rem;
-            font-size: 0.875rem;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.825rem;
             font-weight: 500;
-            margin-right: 0.4rem;
-            margin-bottom: 0.5rem;
+            white-space: nowrap;
         }
+
         table.dataTable thead th {
             background-color: #f8fafc;
             color: #475569;
             font-weight: 700;
             border-bottom: 2px solid #e2e8f0 !important;
+            white-space: nowrap;
         }
-        .no-val {
-            color: #cbd5e1;
-            font-weight: 300;
+        .no-val { color: #cbd5e1; font-weight: 300; }
+
+        /* モバイル表示時の最適化スタイル */
+        @media (max-width: 576px) {
+            .header-section {
+                padding: 1.25rem 0 1rem 0;
+                margin-bottom: 1rem;
+            }
+            .header-section h1 {
+                font-size: 1.25rem !important;
+            }
+            .header-section p {
+                font-size: 0.75rem !important;
+            }
+            .card-table {
+                padding: 0.75rem;
+                border-radius: 12px;
+            }
+            .card-info-box {
+                padding: 0.75rem !important;
+            }
+            .stat-card {
+                padding: 0.5rem;
+            }
+            .stat-num {
+                font-size: 1.25rem;
+            }
+            .stat-label {
+                font-size: 0.7rem;
+            }
+            .filter-buttons-wrapper {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+                -webkit-overflow-scrolling: touch;
+            }
+            .filter-btn {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.65rem;
+            }
+            /* DataTablesコントロールのモバイル対応 */
+            div.dataTables_wrapper div.dataTables_filter {
+                text-align: left !important;
+                margin-top: 0.5rem;
+                margin-bottom: 0.75rem;
+            }
+            div.dataTables_wrapper div.dataTables_filter input {
+                width: 100% !important;
+                margin-left: 0 !important;
+            }
+            div.dataTables_wrapper div.dataTables_length {
+                text-align: left !important;
+                margin-bottom: 0.5rem;
+            }
+            table.dataTable {
+                font-size: 0.8rem;
+            }
+            table.dataTable th, table.dataTable td {
+                padding: 0.5rem 0.35rem !important;
+            }
+            .badge-regional, .badge-mega, .badge-gmax {
+                font-size: 0.75rem;
+                padding: 0.2em 0.4em;
+            }
         }
     </style>
 </head>
@@ -120,7 +166,7 @@
 
     <div class="container">
         <!-- 統計カード -->
-        <div class="row g-3 mb-4">
+        <div class="row g-2 g-md-3 mb-3">
             <div class="col-6 col-md-3">
                 <div class="stat-card">
                     <div class="stat-num">243</div>
@@ -147,14 +193,39 @@
             </div>
         </div>
 
+        <!-- 判定基準 & 点数ルール説明カード -->
+        <div class="card card-info-box mb-3">
+            <div class="card-body p-3">
+                <h2 class="h6 fw-bold mb-2 text-primary d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-info-circle-fill me-2 flex-shrink-0" viewBox="0 0 16 16">
+                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293-.006-.399-.287-.47l.451-.081.937-.02zM8 4.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                    </svg>
+                    判定基準・点数ルールについて
+                </h2>
+                <ul class="mb-0 small text-secondary ps-3" style="line-height: 1.6;">
+                    <li class="mb-1">
+                        <strong>判定基準：</strong>進化系統のいずれかが対応している場合、系統全体を「○」としています。（例：フシギバナが対応している場合、フシギダネやフシギソウも「○」）
+                    </li>
+                    <li>
+                        <strong>点数算定：</strong>特殊形態の未対応項目に応じて加点されます。（すべて非対応で最高6点）
+                        <div class="mt-1 d-flex flex-wrap gap-1 gap-md-2">
+                            <span class="badge bg-light text-dark border">リージョンフォーム対応無し：<strong>3点</strong></span>
+                            <span class="badge bg-light text-dark border">メガシンカ対応無し：<strong>2点</strong></span>
+                            <span class="badge bg-light text-dark border">キョダイマックス対応無し：<strong>1点</strong></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <!-- テーブルメインカード -->
         <div class="card-table">
             <!-- フィルターボタン群 -->
             <div class="mb-3">
-                <span class="fw-bold me-2 text-secondary" style="font-size: 0.9rem;">クイック絞り込み:</span>
-                <div class="d-inline-block mt-2 mt-md-0">
+                <div class="fw-bold mb-1 text-secondary" style="font-size: 0.85rem;">クイック絞り込み:</div>
+                <div class="filter-buttons-wrapper">
                     <button class="btn btn-primary filter-btn active" onclick="filterTable('all')">すべて表示</button>
-                    <button class="btn btn-outline-info filter-btn" onclick="filterTable('regional')">リージョンフォーム対応</button>
+                    <button class="btn btn-outline-info filter-btn text-dark" onclick="filterTable('regional')">リージョンフォーム対応</button>
                     <button class="btn btn-outline-danger filter-btn" onclick="filterTable('mega')">メガシンカ対応</button>
                     <button class="btn btn-outline-warning filter-btn text-dark" onclick="filterTable('gmax')">キョダイマックス対応</button>
                     <button class="btn btn-outline-secondary filter-btn" onclick="filterTable('multi')">複数フォーム対応</button>
@@ -163,14 +234,14 @@
 
             <!-- テーブル -->
             <div class="table-responsive">
-                <table id="pokemonTable" class="table table-hover align-middle w-100">
+                <table id="pokemonTable" class="table table-hover align-middle w-100 nowrap">
                     <thead>
                         <tr>
                             <th style="width: 10%;">No.</th>
                             <th style="width: 30%;">名前</th>
-                            <th style="width: 18%;" class="text-center">リージョンフォーム</th>
+                            <th style="width: 18%;" class="text-center">リージョン</th>
                             <th style="width: 16%;" class="text-center">メガシンカ</th>
-                            <th style="width: 16%;" class="text-center">キョダイマックス</th>
+                            <th style="width: 16%;" class="text-center">キョダイ</th>
                             <th style="width: 10%;" class="text-center">点数</th>
                         </tr>
                     </thead>
@@ -181,7 +252,7 @@
         </div>
         
         <footer class="mt-4 text-center text-muted small">
-            <p>ポケモンスリープ 実装ポケモン一覧 データベース | GitHub Pages</p>
+            <p>ポケモンスリープ 実装ポケモン特殊形態対応一覧 | 非公式ファンツール</p>
         </footer>
     </div>
 
@@ -190,12 +261,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
     <script>
-        // 埋め込みデータ
         const pokemonData = [{"no": 23, "name": "アーボ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 24, "name": "アーボック", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 39, "name": "プリン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 40, "name": "プクリン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 54, "name": "コダック", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 55, "name": "ゴルダック", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 56, "name": "マンキー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 57, "name": "オコリザル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 81, "name": "コイル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 82, "name": "レアコイル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 84, "name": "ドードー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 85, "name": "ドードリオ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 113, "name": "ラッキー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 132, "name": "メタモン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 151, "name": "ミュウ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 173, "name": "ピィ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 174, "name": "ププリン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 175, "name": "トゲピー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 176, "name": "トゲチック", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 177, "name": "ネイティ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 178, "name": "ネイティオ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 185, "name": "ウソッキー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 198, "name": "ヤミカラス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 202, "name": "ソーナンス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 213, "name": "ツボツボ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 225, "name": "デリバード", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 242, "name": "ハピナス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 243, "name": "ライコウ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 244, "name": "エンテイ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 245, "name": "スイクン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 287, "name": "ナマケロ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 288, "name": "ヤルキモノ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 289, "name": "ケッキング", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 311, "name": "プラスル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 312, "name": "マイナン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 316, "name": "ゴクリン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 317, "name": "マルノーム", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 328, "name": "ナックラー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 329, "name": "ビブラーバ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 330, "name": "フライゴン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 360, "name": "ソーナノ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 363, "name": "タマザラシ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 363, "name": "タマザラシ(ホリデー)", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 364, "name": "トドグラー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 365, "name": "トドゼルガ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 387, "name": "ナエトル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 388, "name": "ハヤシガメ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 389, "name": "ドダイトス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 390, "name": "ヒコザル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 391, "name": "モウカザル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 392, "name": "ゴウカザル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 393, "name": "ポッチャマ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 394, "name": "ポッタイシ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 395, "name": "エンペルト", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 403, "name": "コリンク", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 404, "name": "ルクシオ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 405, "name": "レントラー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 425, "name": "フワンテ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 426, "name": "フワライド", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 430, "name": "ドンカラス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 438, "name": "ウソハチ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 440, "name": "ピンプク", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 442, "name": "ミカルゲ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 453, "name": "グレッグル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 454, "name": "ドクロッグ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 462, "name": "ジバコイル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 468, "name": "トゲキッス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 488, "name": "クレセリア", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 517, "name": "ムンナ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 518, "name": "ムシャーナ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 557, "name": "イシズマイ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 558, "name": "イワパレス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 696, "name": "チゴラス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 697, "name": "ガチゴラス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 702, "name": "デデンネ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 710, "name": "バケッチャ(ちゅうだま)", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 710, "name": "バケッチャ(こだま)", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 710, "name": "バケッチャ(おおだま)", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 710, "name": "バケッチャ(ギガだま)", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 711, "name": "パンプジン(ちゅうだま)", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 711, "name": "パンプジン(こだま)", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 711, "name": "パンプジン(おおだま)", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 711, "name": "パンプジン(ギガだま)", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 714, "name": "オンバット", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 715, "name": "オンバーン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 736, "name": "アゴジムシ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 737, "name": "デンヂムシ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 738, "name": "クワガノン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 742, "name": "アブリー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 743, "name": "アブリボン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 759, "name": "ヌイコグマ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 760, "name": "キテルグマ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 764, "name": "キュワワー", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 777, "name": "トゲデマル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 778, "name": "ミミッキュ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 845, "name": "ウッウ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 906, "name": "ニャオハ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 907, "name": "ニャローテ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 908, "name": "マスカーニャ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 909, "name": "ホゲータ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 910, "name": "アチゲータ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 911, "name": "ラウドボーン", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 912, "name": "クワッス", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 913, "name": "ウェルカモ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 914, "name": "ウェーニバル", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 921, "name": "パモ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 922, "name": "パモット", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 923, "name": "パーモット", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 974, "name": "アルクジラ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 975, "name": "ハルクジラ", "regional": "", "mega": "", "gmax": "", "score": 6}, {"no": 10, "name": "キャタピー", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 11, "name": "トランセル", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 12, "name": "バタフリー", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 133, "name": "イーブイ", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 133, "name": "イーブイ(ハロウィン)", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 133, "name": "イーブイ(ホリデー)", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 134, "name": "シャワーズ", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 135, "name": "サンダース", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 136, "name": "ブースター", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 196, "name": "エーフィ", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 197, "name": "ブラッキー", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 470, "name": "リーフィア", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 471, "name": "グレイシア", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 700, "name": "ニンフィア", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 848, "name": "エレズン", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 849, "name": "ストリンダー(ハイ)", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 849, "name": "ストリンダー(ロー)", "regional": "", "mega": "", "gmax": "〇", "score": 5}, {"no": 35, "name": "ピッピ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 36, "name": "ピクシー", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 69, "name": "マダツボミ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 70, "name": "ウツドン", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 71, "name": "ウツボット", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 95, "name": "イワーク", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 115, "name": "ガルーラ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 127, "name": "カイロス", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 147, "name": "ミニリュウ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 148, "name": "ハクリュー", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 149, "name": "カイリュー", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 152, "name": "チコリータ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 153, "name": "ベイリーフ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 154, "name": "メガニウム", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 158, "name": "ワニノコ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 159, "name": "アリゲイツ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 160, "name": "オーダイル", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 179, "name": "メリープ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 180, "name": "モココ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 181, "name": "デンリュウ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 208, "name": "ハガネール", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 214, "name": "ヘラクロス", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 228, "name": "デルビル", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 229, "name": "ヘルガー", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 246, "name": "ヨーギラス", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 247, "name": "サナギラス", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 248, "name": "バンギラス", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 252, "name": "キモリ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 253, "name": "ジュプトル", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 254, "name": "ジュカイン", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 255, "name": "アチャモ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 256, "name": "ワカシャモ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 257, "name": "バシャーモ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 258, "name": "ミズゴロウ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 259, "name": "ヌマクロー", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 260, "name": "ラグラージ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 280, "name": "ラルトス", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 281, "name": "キルリア", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 282, "name": "サーナイト", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 302, "name": "ヤミラミ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 303, "name": "クチート", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 304, "name": "ココドラ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 305, "name": "コドラ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 306, "name": "ボスゴドラ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 333, "name": "チルット", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 334, "name": "チルタリス", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 353, "name": "カゲボウズ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 354, "name": "ジュペッタ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 359, "name": "アブソル", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 371, "name": "タツベイ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 372, "name": "コモルー", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 373, "name": "ボーマンダ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 380, "name": "ラティアス", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 381, "name": "ラティオス", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 447, "name": "リオル", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 448, "name": "ルカリオ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 459, "name": "ユキカブリ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 460, "name": "ユキノオー", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 475, "name": "エルレイド", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 491, "name": "ダークライ", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 701, "name": "ルチャブル", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 780, "name": "ジジーロン", "regional": "", "mega": "〇", "gmax": "", "score": 4}, {"no": 1, "name": "フシギダネ", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 2, "name": "フシギソウ", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 3, "name": "フシギバナ", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 4, "name": "ヒトカゲ", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 5, "name": "リザード", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 6, "name": "リザードン", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 7, "name": "ゼニガメ", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 8, "name": "カメール", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 9, "name": "カメックス", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 19, "name": "コラッタ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 20, "name": "ラッタ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 27, "name": "サンド", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 28, "name": "サンドパン", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 37, "name": "ロコン", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 37, "name": "ロコン(アローラ)", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 38, "name": "キュウコン", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 38, "name": "キュウコン(アローラ)", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 50, "name": "ディグダ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 51, "name": "ダグトリオ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 58, "name": "ガーディ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 59, "name": "ウインディ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 74, "name": "イシツブテ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 75, "name": "ゴローン", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 76, "name": "ゴローニャ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 83, "name": "カモネギ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 92, "name": "ゴース", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 93, "name": "ゴースト", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 94, "name": "ゲンガー", "regional": "", "mega": "〇", "gmax": "〇", "score": 3}, {"no": 104, "name": "カラカラ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 105, "name": "ガラガラ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 122, "name": "バリヤード", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 155, "name": "ヒノアラシ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 156, "name": "マグマラシ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 157, "name": "バクフーン", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 194, "name": "ウパー", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 194, "name": "ウパー(パルデア)", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 195, "name": "ヌオー", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 215, "name": "ニューラ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 439, "name": "マネネ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 461, "name": "マニューラ", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 627, "name": "ワシボン", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 628, "name": "ウォーグル", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 980, "name": "ドオー", "regional": "〇", "mega": "", "gmax": "", "score": 3}, {"no": 52, "name": "ニャース", "regional": "〇", "mega": "", "gmax": "〇", "score": 2}, {"no": 53, "name": "ペルシアン", "regional": "〇", "mega": "", "gmax": "〇", "score": 2}, {"no": 79, "name": "ヤドン", "regional": "〇", "mega": "〇", "gmax": "", "score": 1}, {"no": 80, "name": "ヤドラン", "regional": "〇", "mega": "〇", "gmax": "", "score": 1}, {"no": 199, "name": "ヤドキング", "regional": "〇", "mega": "〇", "gmax": "", "score": 1}, {"no": 25, "name": "ピカチュウ", "regional": "〇", "mega": "〇", "gmax": "〇", "score": 0}, {"no": 25, "name": "ピカチュウ(ハロウィン)", "regional": "〇", "mega": "〇", "gmax": "〇", "score": 0}, {"no": 25, "name": "ピカチュウ(ハロウィン)", "regional": "〇", "mega": "〇", "gmax": "〇", "score": 0}, {"no": 25, "name": "ピカチュウ(ホリデー)", "regional": "〇", "mega": "〇", "gmax": "〇", "score": 0}, {"no": 26, "name": "ライチュウ", "regional": "〇", "mega": "〇", "gmax": "〇", "score": 0}, {"no": 172, "name": "ピチュー", "regional": "〇", "mega": "〇", "gmax": "〇", "score": 0}];
-
         let table;
 
         $(document).ready(function() {
@@ -239,7 +307,7 @@
                         data: 'score',
                         className: 'text-center',
                         render: function(data) {
-                            return '<span class="badge badge-score score-' + data + '">' + data + ' 点</span>';
+                            return '<span class="badge badge-score score-' + data + '">' + data + '点</span>';
                         }
                     }
                 ],
@@ -248,50 +316,37 @@
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/ja.json'
                 },
-                order: [[0, 'asc']],
-                responsive: true
+                order: [[0, 'asc']]
             });
         });
 
-        // フィルター切り替え関数
         function filterTable(type) {
-            // ボタンのactive表示切り替え
-            $('.filter-btn').removeClass('active btn-primary btn-info btn-danger btn-warning btn-secondary')
-                           .addClass('btn-outline-secondary');
-            
+            $('.filter-btn').removeClass('active btn-primary btn-info btn-danger btn-warning btn-secondary').addClass('btn-outline-secondary');
             const eventTarget = event.currentTarget;
             $(eventTarget).removeClass('btn-outline-secondary btn-outline-info btn-outline-danger btn-outline-warning');
 
-            // カスタム検索の解除
             $.fn.dataTable.ext.search.pop();
 
             if (type === 'all') {
                 $(eventTarget).addClass('btn-primary active');
             } else if (type === 'regional') {
-                $(eventTarget).addClass('btn-info active text-white');
-                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                    return pokemonData[dataIndex].regional === '〇';
-                });
+                $(eventTarget).addClass('btn-info active text-dark');
+                $.fn.dataTable.ext.search.push((settings, data, dataIndex) => pokemonData[dataIndex].regional === '〇');
             } else if (type === 'mega') {
                 $(eventTarget).addClass('btn-danger active');
-                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                    return pokemonData[dataIndex].mega === '〇';
-                });
+                $.fn.dataTable.ext.search.push((settings, data, dataIndex) => pokemonData[dataIndex].mega === '〇');
             } else if (type === 'gmax') {
                 $(eventTarget).addClass('btn-warning active text-dark');
-                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                    return pokemonData[dataIndex].gmax === '〇';
-                });
+                $.fn.dataTable.ext.search.push((settings, data, dataIndex) => pokemonData[dataIndex].gmax === '〇');
             } else if (type === 'multi') {
                 $(eventTarget).addClass('btn-secondary active');
-                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                $.fn.dataTable.ext.search.push((settings, data, dataIndex) => {
                     const count = (pokemonData[dataIndex].regional === '〇' ? 1 : 0) +
                                   (pokemonData[dataIndex].mega === '〇' ? 1 : 0) +
                                   (pokemonData[dataIndex].gmax === '〇' ? 1 : 0);
                     return count >= 2;
                 });
             }
-
             table.draw();
         }
     </script>

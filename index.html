@@ -92,11 +92,19 @@
             table-layout: fixed;
             margin: 0 !important;
         }
+        
+        /* 追従(Sticky)の確実な有効化 */
+        .table-responsive {
+            overflow: visible !important;
+            overflow-x: visible !important;
+            overflow-y: visible !important;
+        }
+        
         table.dataTable thead th {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 100 !important;
             background-color: #f8fafc !important;
             color: #475569;
             font-weight: 700;
@@ -105,7 +113,12 @@
             font-size: 0.825rem;
             white-space: nowrap !important;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            /* DataTablesの内部ボーダー崩れ防止 */
+            border-top: none !important;
+            outline: 1px solid #cbd5e1;
+            outline-offset: -1px;
         }
+
         table.dataTable tbody td {
             padding: 0.45rem 0.15rem !important;
             font-size: 0.825rem;

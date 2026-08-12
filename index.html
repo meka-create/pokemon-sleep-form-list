@@ -22,7 +22,9 @@
         .card-info-box { background: #ffffff; border-radius: 12px; border: 1px solid #cbd5e1; border-left: 5px solid #2563eb; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .card-table { background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.25rem; overflow: visible !important; }
         .table-responsive { overflow: visible !important; overflow-x: visible !important; overflow-y: visible !important; }
-        .type-badge { font-size: 0.75rem; padding: 0.3em 0.5em; border-radius: 4px; color: #fff; font-weight: 600; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.1); display: inline-block; min-width: 3.5rem; text-align: center; }
+        
+        /* 修正: white-space: nowrap を追加し、改行を防ぐ */
+        .type-badge { font-size: 0.75rem; padding: 0.3em 0.5em; border-radius: 4px; color: #fff; font-weight: 600; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.1); display: inline-block; min-width: 3.5rem; text-align: center; white-space: nowrap; }
         
         .type-ノーマル { background-color: #A8A878; } .type-ほのお { background-color: #F08030; } .type-みず { background-color: #6890F0; } .type-でんき { background-color: #F8D030; } .type-くさ { background-color: #78C850; } .type-こおり { background-color: #98D8D8; color: #333; text-shadow: none;} .type-かくとう { background-color: #C03028; } .type-どく { background-color: #A040A0; } .type-じめん { background-color: #E0C068; } .type-ひこう { background-color: #A890F0; } .type-エスパー { background-color: #F85888; } .type-むし { background-color: #A8B820; } .type-いわ { background-color: #B8A038; } .type-ゴースト { background-color: #705898; } .type-ドラゴン { background-color: #7038F8; } .type-あく { background-color: #705848; } .type-はがね { background-color: #B8B8D0; color: #333; text-shadow: none;} .type-フェアリー { background-color: #EE99AC; color: #333; text-shadow: none; }
         
@@ -35,10 +37,9 @@
         table.dataTable tbody td { padding: 0.45rem 0.15rem !important; font-size: 0.825rem; vertical-align: middle; }
         .no-val { color: #cbd5e1; font-weight: 300; }
         
-        /* 候補保存ボタン・スイッチ用CSS */
+        /* 候補保存ボタン用CSS (無駄な背景色・装飾を排除) */
         .save-btn { font-size: 1.15rem; padding: 0.1rem 0.4rem; line-height: 1; border-radius: 6px; transition: transform 0.15s, background-color 0.15s; cursor: pointer; }
         .save-btn:active { transform: scale(0.85); }
-        .filter-switch-wrapper { background-color: #fffbeb; padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid #fde68a; display: inline-block; }
 
         table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc { padding-right: 0.9rem !important; }
         table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after { right: 0.1rem !important; }
@@ -61,7 +62,9 @@
             table.dataTable tbody td { font-size: 0.65rem !important; padding: 0.4rem 0.05rem !important; }
             .badge-regional, .badge-mega, .badge-gmax { font-size: 0.6rem; padding: 0.2em 0.2em; }
             .badge-score { font-size: 0.7rem; padding: 0.2em 0.3em; }
-            .type-badge { font-size: 0.6rem; padding: 0.2em 0.3em; min-width: auto; }
+            
+            /* スマホ時も white-space: nowrap を強制し改行を防止 */
+            .type-badge { font-size: 0.6rem; padding: 0.2em 0.3em; min-width: auto; white-space: nowrap; }
             .poke-name { word-break: break-all; line-height: 1.25; display: inline-block; font-size: 0.7rem; }
             .save-btn { font-size: 1rem; padding: 0.1rem 0.3rem; }
         }
@@ -102,29 +105,37 @@
         <div class="card-table">
             <div class="controls-wrapper">
                 <div class="row g-2 align-items-end">
-                    <div class="col-12 col-md-4">
-                        <label class="form-label fw-bold small text-secondary mb-1">名前で探す <span class="fw-normal" style="font-size:0.7rem;">(前方一致・ひらがな可)</span></label>
+                    
+                    <!-- 名前検索 -->
+                    <div class="col-6 col-md-4 order-1">
+                        <label class="form-label fw-bold small text-secondary mb-1">名前で探す</label>
                         <input type="text" id="customSearchInput" class="form-control form-control-sm" placeholder="例: ピカチュウ">
                     </div>
-                    <div class="col-6 col-md-4">
+                    
+                    <!-- 候補トグル (スマホでは名前の右、PCでは右下へスマートに配置) -->
+                    <div class="col-6 col-md-12 order-2 order-md-4 mt-md-2 text-md-end d-flex align-items-center justify-content-start justify-content-md-end" style="height: 31px;">
+                        <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" id="showSavedOnly" style="cursor: pointer;">
+                            <label class="form-check-label fw-bold text-secondary ms-1" style="font-size: 0.85rem; cursor: pointer;" for="showSavedOnly">★ 候補のみ表示</label>
+                        </div>
+                    </div>
+
+                    <!-- タイプで絞り込み -->
+                    <div class="col-6 col-md-4 order-3 order-md-2 mt-2 mt-md-0">
                         <label class="form-label fw-bold small text-secondary mb-1">タイプで絞り込み</label>
                         <select id="typeFilterSelect" class="form-select form-select-sm">
                             <option value="all">すべてのタイプ</option><option value="ノーマル">ノーマル</option><option value="ほのお">ほのお</option><option value="みず">みず</option><option value="でんき">でんき</option><option value="くさ">くさ</option><option value="こおり">こおり</option><option value="かくとう">かくとう</option><option value="どく">どく</option><option value="じめん">じめん</option><option value="ひこう">ひこう</option><option value="エスパー">エスパー</option><option value="むし">むし</option><option value="いわ">いわ</option><option value="ゴースト">ゴースト</option><option value="ドラゴン">ドラゴン</option><option value="あく">あく</option><option value="はがね">はがね</option><option value="フェアリー">フェアリー</option>
                         </select>
                     </div>
-                    <div class="col-6 col-md-4">
+                    
+                    <!-- 特殊形態で絞り込み -->
+                    <div class="col-6 col-md-4 order-4 order-md-3 mt-2 mt-md-0">
                         <label class="form-label fw-bold small text-secondary mb-1">特殊形態で絞り込み</label>
                         <select id="formFilterSelect" class="form-select form-select-sm">
                             <option value="all">すべて表示</option><option value="none">すべて非対応</option><option value="regional">リージョン対応</option><option value="mega">メガシンカ対応</option><option value="gmax">キョダイ対応</option><option value="multi">複数フォーム対応</option>
                         </select>
                     </div>
-                    <!-- 配置と文言をスマートに改善した候補保存スイッチ -->
-                    <div class="col-12 mt-2 text-md-end text-center">
-                        <div class="form-check form-switch filter-switch-wrapper shadow-sm mb-0 text-start d-inline-block">
-                            <input class="form-check-input" type="checkbox" id="showSavedOnly" style="cursor: pointer;">
-                            <label class="form-check-label fw-bold" style="color: #92400e; font-size: 0.85rem; cursor: pointer;" for="showSavedOnly">★ 候補のみ表示</label>
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <div class="table-responsive">

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pokesleep-cache-v1786531797';
+const CACHE_NAME = 'pokesleep-cache-v1786533453';
 const urlsToCache = [
   './',
   './index.html',

@@ -23,7 +23,7 @@
         .card-table { background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.25rem; overflow: visible !important; }
         .table-responsive { overflow: visible !important; overflow-x: visible !important; overflow-y: visible !important; }
         
-        /* 修正: white-space: nowrap を追加し、改行を防ぐ */
+        /* タイプの改行防止 */
         .type-badge { font-size: 0.75rem; padding: 0.3em 0.5em; border-radius: 4px; color: #fff; font-weight: 600; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.1); display: inline-block; min-width: 3.5rem; text-align: center; white-space: nowrap; }
         
         .type-ノーマル { background-color: #A8A878; } .type-ほのお { background-color: #F08030; } .type-みず { background-color: #6890F0; } .type-でんき { background-color: #F8D030; } .type-くさ { background-color: #78C850; } .type-こおり { background-color: #98D8D8; color: #333; text-shadow: none;} .type-かくとう { background-color: #C03028; } .type-どく { background-color: #A040A0; } .type-じめん { background-color: #E0C068; } .type-ひこう { background-color: #A890F0; } .type-エスパー { background-color: #F85888; } .type-むし { background-color: #A8B820; } .type-いわ { background-color: #B8A038; } .type-ゴースト { background-color: #705898; } .type-ドラゴン { background-color: #7038F8; } .type-あく { background-color: #705848; } .type-はがね { background-color: #B8B8D0; color: #333; text-shadow: none;} .type-フェアリー { background-color: #EE99AC; color: #333; text-shadow: none; }
@@ -37,7 +37,7 @@
         table.dataTable tbody td { padding: 0.45rem 0.15rem !important; font-size: 0.825rem; vertical-align: middle; }
         .no-val { color: #cbd5e1; font-weight: 300; }
         
-        /* 候補保存ボタン用CSS (無駄な背景色・装飾を排除) */
+        /* 候補保存ボタン用CSS */
         .save-btn { font-size: 1.15rem; padding: 0.1rem 0.4rem; line-height: 1; border-radius: 6px; transition: transform 0.15s, background-color 0.15s; cursor: pointer; }
         .save-btn:active { transform: scale(0.85); }
 
@@ -63,7 +63,6 @@
             .badge-regional, .badge-mega, .badge-gmax { font-size: 0.6rem; padding: 0.2em 0.2em; }
             .badge-score { font-size: 0.7rem; padding: 0.2em 0.3em; }
             
-            /* スマホ時も white-space: nowrap を強制し改行を防止 */
             .type-badge { font-size: 0.6rem; padding: 0.2em 0.3em; min-width: auto; white-space: nowrap; }
             .poke-name { word-break: break-all; line-height: 1.25; display: inline-block; font-size: 0.7rem; }
             .save-btn { font-size: 1rem; padding: 0.1rem 0.3rem; }
@@ -112,11 +111,11 @@
                         <input type="text" id="customSearchInput" class="form-control form-control-sm" placeholder="例: ピカチュウ">
                     </div>
                     
-                    <!-- 候補トグル (スマホでは名前の右、PCでは右下へスマートに配置) -->
-                    <div class="col-6 col-md-12 order-2 order-md-4 mt-md-2 text-md-end d-flex align-items-center justify-content-start justify-content-md-end" style="height: 31px;">
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input" type="checkbox" id="showSavedOnly" style="cursor: pointer;">
-                            <label class="form-check-label fw-bold text-secondary ms-1" style="font-size: 0.85rem; cursor: pointer;" for="showSavedOnly">★ 候補のみ表示</label>
+                    <!-- 候補トグル (スマホでは検索の右、PCでは右下へスマートに配置) -->
+                    <div class="col-6 col-md-12 order-2 order-md-4 mt-md-2 d-flex align-items-center justify-content-start justify-content-md-end" style="height: 31px;">
+                        <label class="fw-bold text-secondary me-2 mb-0" style="font-size: 0.85rem; cursor: pointer; user-select: none;" for="showSavedOnly">★ 候補のみ表示</label>
+                        <div class="form-check form-switch mb-0 p-0 m-0 d-flex align-items-center">
+                            <input class="form-check-input ms-0 mt-0" type="checkbox" id="showSavedOnly" style="cursor: pointer;">
                         </div>
                     </div>
 

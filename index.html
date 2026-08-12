@@ -63,6 +63,7 @@
             .badge-regional, .badge-mega, .badge-gmax { font-size: 0.6rem; padding: 0.2em 0.2em; }
             .badge-score { font-size: 0.7rem; padding: 0.2em 0.3em; }
             
+            /* スマホ時も white-space: nowrap を強制し改行を防止 */
             .type-badge { font-size: 0.6rem; padding: 0.2em 0.3em; min-width: auto; white-space: nowrap; }
             .poke-name { word-break: break-all; line-height: 1.25; display: inline-block; font-size: 0.7rem; }
             .save-btn { font-size: 1rem; padding: 0.1rem 0.3rem; }
@@ -105,34 +106,34 @@
             <div class="controls-wrapper">
                 <div class="row g-2 align-items-end">
                     
-                    <!-- 名前検索 -->
-                    <div class="col-6 col-md-4 order-1">
+                    <!-- 名前検索 (スマホ100%幅 / PC33%幅) -->
+                    <div class="col-12 col-md-4 order-1">
                         <label class="form-label fw-bold small text-secondary mb-1">名前で探す</label>
                         <input type="text" id="customSearchInput" class="form-control form-control-sm" placeholder="例: ピカチュウ">
                     </div>
                     
-                    <!-- 候補トグル (スマホでは検索の右、PCでは右下へスマートに配置) -->
-                    <div class="col-6 col-md-12 order-2 order-md-4 mt-md-2 d-flex align-items-center justify-content-start justify-content-md-end" style="height: 31px;">
-                        <label class="fw-bold text-secondary me-2 mb-0" style="font-size: 0.85rem; cursor: pointer; user-select: none;" for="showSavedOnly">★ 候補のみ表示</label>
-                        <div class="form-check form-switch mb-0 p-0 m-0 d-flex align-items-center">
-                            <input class="form-check-input ms-0 mt-0" type="checkbox" id="showSavedOnly" style="cursor: pointer;">
-                        </div>
-                    </div>
-
-                    <!-- タイプで絞り込み -->
-                    <div class="col-6 col-md-4 order-3 order-md-2 mt-2 mt-md-0">
+                    <!-- タイプで絞り込み (スマホ50%幅 / PC33%幅) -->
+                    <div class="col-6 col-md-4 order-2 mt-2 mt-md-0">
                         <label class="form-label fw-bold small text-secondary mb-1">タイプで絞り込み</label>
                         <select id="typeFilterSelect" class="form-select form-select-sm">
                             <option value="all">すべてのタイプ</option><option value="ノーマル">ノーマル</option><option value="ほのお">ほのお</option><option value="みず">みず</option><option value="でんき">でんき</option><option value="くさ">くさ</option><option value="こおり">こおり</option><option value="かくとう">かくとう</option><option value="どく">どく</option><option value="じめん">じめん</option><option value="ひこう">ひこう</option><option value="エスパー">エスパー</option><option value="むし">むし</option><option value="いわ">いわ</option><option value="ゴースト">ゴースト</option><option value="ドラゴン">ドラゴン</option><option value="あく">あく</option><option value="はがね">はがね</option><option value="フェアリー">フェアリー</option>
                         </select>
                     </div>
                     
-                    <!-- 特殊形態で絞り込み -->
-                    <div class="col-6 col-md-4 order-4 order-md-3 mt-2 mt-md-0">
+                    <!-- 特殊形態で絞り込み (スマホ50%幅 / PC33%幅) -->
+                    <div class="col-6 col-md-4 order-3 mt-2 mt-md-0">
                         <label class="form-label fw-bold small text-secondary mb-1">特殊形態で絞り込み</label>
                         <select id="formFilterSelect" class="form-select form-select-sm">
                             <option value="all">すべて表示</option><option value="none">すべて非対応</option><option value="regional">リージョン対応</option><option value="mega">メガシンカ対応</option><option value="gmax">キョダイ対応</option><option value="multi">複数フォーム対応</option>
                         </select>
+                    </div>
+
+                    <!-- 候補トグル (スマホ・PC共通で全体の下部・右寄せに配置) -->
+                    <div class="col-12 order-4 mt-2 d-flex align-items-center justify-content-end" style="height: 31px;">
+                        <label class="fw-bold text-secondary me-2 mb-0" style="font-size: 0.85rem; cursor: pointer; user-select: none;" for="showSavedOnly">★ 候補のみ表示</label>
+                        <div class="form-check form-switch mb-0 p-0 m-0 d-flex align-items-center">
+                            <input class="form-check-input ms-0 mt-0" type="checkbox" id="showSavedOnly" style="cursor: pointer;">
+                        </div>
                     </div>
 
                 </div>

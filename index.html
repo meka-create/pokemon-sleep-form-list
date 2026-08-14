@@ -42,7 +42,6 @@
         table.dataTable tbody td { padding: 0.45rem 0.15rem !important; font-size: 0.825rem; vertical-align: middle; }
         .no-val { color: #cbd5e1; font-weight: 300; }
         
-        /* ★ S〜Dランク用の洗練されたボタンCSS（フラットカラー＆シャドウ） */
         .save-btn { 
             font-size: 1.15rem; 
             padding: 0.15rem 0; 
@@ -62,7 +61,6 @@
         .save-btn:active { transform: scale(0.9); }
         .dropdown-menu { border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-height: 280px; overflow-y: auto; }
         
-        /* ★ 各ランクの美しいカラーパレット */
         .rank-s { background-color: #ff4d4f; color: #ffffff; box-shadow: 0 2px 5px rgba(255, 77, 79, 0.4); }
         .rank-a { background-color: #ff9c6e; color: #ffffff; box-shadow: 0 2px 5px rgba(255, 156, 110, 0.4); }
         .rank-b { background-color: #95de64; color: #ffffff; box-shadow: 0 2px 5px rgba(149, 222, 100, 0.4); }
@@ -70,7 +68,6 @@
         .rank-d { background-color: #a6a6a6; color: #ffffff; box-shadow: 0 2px 5px rgba(166, 166, 166, 0.4); }
         .rank-none { background-color: #ffffff; color: #bfbfbf; border: 1.5px dashed #d9d9d9; font-weight: bold; }
         
-        /* ドロップダウンテキスト用カラー */
         .color-s { color: #ff4d4f !important; }
         .color-a { color: #ff9c6e !important; }
         .color-b { color: #95de64 !important; }
@@ -111,10 +108,11 @@
     </div>
     <div class="container">
         <div class="row g-2 g-md-3 mb-3">
-            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num">104</div><div class="stat-label">実装データ件数</div></div></div>
-            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #0369a1;">16</div><div class="stat-label">リージョン対応</div></div></div>
-            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #be185d;">36</div><div class="stat-label">メガシンカ対応</div></div></div>
-            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #b45309;">9</div><div class="stat-label">キョダイ対応</div></div></div>
+            <!-- ★ 統計カードの文言をスッキリとした名詞に統一 -->
+            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num">104</div><div class="stat-label">アメの種類</div></div></div>
+            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #0369a1;">16</div><div class="stat-label">リージョンフォーム</div></div></div>
+            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #be185d;">36</div><div class="stat-label">メガシンカ</div></div></div>
+            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #b45309;">9</div><div class="stat-label">キョダイマックス</div></div></div>
         </div>
         
         <div class="card card-info-box mb-3">
@@ -139,9 +137,9 @@
                         </li>
                     </ul>
                     <div class="mt-2 pt-2 border-top text-muted" style="font-size: 0.7rem; line-height: 1.4;">
-                        <!-- ★ テキストを7点以上に修正 -->
-                        ・候補には7点以上のポケモンを推奨<br>
-                        ・追加進化が未実装のマンキーは候補外を推奨
+                        <!-- ★ 注釈を推奨ベースの簡潔な2文に変更 -->
+                        ・候補に選ぶ目安は「7点以上」推奨<br>
+                        ・マンキーは追加進化未実装のため候補外を推奨
                     </div>
                 </div>
             </div>
@@ -162,12 +160,14 @@
                     </div>
                     <div class="col-6 col-md-4 order-3 mt-2 mt-md-0">
                         <label class="form-label fw-bold small text-secondary mb-1">特殊形態で絞り込み</label>
+                        <!-- ★ 選択ボックスのテキストから「対応」などを削除しシンプルに統一 -->
                         <select id="formFilterSelect" class="form-select form-select-sm">
-                            <option value="all">すべて表示</option><option value="none">すべて非対応</option><option value="regional">リージョン対応</option><option value="mega">メガシンカ対応</option><option value="gmax">キョダイ対応</option><option value="multi">複数フォーム対応</option>
+                            <option value="all">すべて表示</option><option value="none">すべて無し</option><option value="regional">リージョンフォーム</option><option value="mega">メガシンカ</option><option value="gmax">キョダイマックス</option><option value="multi">複数該当</option>
                         </select>
                     </div>
                     <div class="col-12 order-4 mt-2 d-flex align-items-center justify-content-end" style="height: 31px;">
-                        <label class="fw-bold text-secondary me-2 mb-0" style="font-size: 0.85rem; cursor: pointer; user-select: none;" for="showSavedOnly">★ 候補のみ表示</label>
+                        <!-- ★ 「★ 候補のみ表示」から★を削除 -->
+                        <label class="fw-bold text-secondary me-2 mb-0" style="font-size: 0.85rem; cursor: pointer; user-select: none;" for="showSavedOnly">候補のみ表示</label>
                         <div class="form-check form-switch mb-0 p-0 m-0 d-flex align-items-center">
                             <input class="form-check-input ms-0 mt-0" type="checkbox" id="showSavedOnly" style="cursor: pointer;">
                         </div>
@@ -263,7 +263,6 @@
                                 return priority === 0 ? 99 : priority;
                             }
                             
-                            // ★ 未選択状態は「☆」から「枠ありの＋」に変更
                             let btnClass = 'rank-none';
                             let icon = '＋';
                             
@@ -273,7 +272,6 @@
                             else if (priority === 4) { btnClass = 'rank-c'; icon = 'C'; }
                             else if (priority === 5) { btnClass = 'rank-d'; icon = 'D'; }
                             
-                            // ★ 余計なテキストを削ぎ落としたメニュー
                             let menuItems = `
                                 <li><a class="dropdown-item color-s fw-bold py-2" href="#" onclick="setPriority(${data}, 1, this, event)">S</a></li>
                                 <li><a class="dropdown-item color-a fw-bold py-2" href="#" onclick="setPriority(${data}, 2, this, event)">A</a></li>
@@ -302,7 +300,6 @@
                     { data: 'mega', className: 'text-center', render: function(data) { return data === '〇' ? '<span class="badge badge-mega">〇</span>' : '<span class="no-val">-</span>'; } },
                     { data: 'gmax', className: 'text-center', render: function(data) { return data === '〇' ? '<span class="badge badge-gmax">〇</span>' : '<span class="no-val">-</span>'; } },
                     { 
-                        // ★ 点数の文字列ソートバグ修正（Number型として扱う）
                         data: 'score', 
                         className: 'text-center', 
                         render: function(data, type) { 

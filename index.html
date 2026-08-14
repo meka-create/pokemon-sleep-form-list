@@ -35,13 +35,11 @@
         table.dataTable tbody td { padding: 0.45rem 0.15rem !important; font-size: 0.825rem; vertical-align: middle; }
         .no-val { color: #cbd5e1; font-weight: 300; }
         
-        /* ★ 候補保存ボタン（優先度1-9対応）用CSS */
         .save-btn { position: relative; font-size: 1.15rem; padding: 0.1rem 0.4rem; line-height: 1.1; border-radius: 6px; transition: transform 0.15s, background-color 0.15s; cursor: pointer; width: 100%; max-width: 44px; margin: 0 auto; display: block; text-align: center; }
-        .save-btn::after { display: none !important; } /* デフォルトのキャレット(▼)を隠して横幅を節約 */
+        .save-btn::after { display: none !important; }
         .save-btn:active { transform: scale(0.85); }
         .dropdown-menu { border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-height: 280px; overflow-y: auto; }
         
-        /* ★ ★の右下に数字を配置するスタイル */
         .star-number { position: absolute; bottom: 0px; right: 2px; font-size: 0.7rem; line-height: 1; font-weight: 900; color: #212529; }
 
         table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc { padding-right: 0.9rem !important; }
@@ -65,7 +63,6 @@
             .badge-score { font-size: 0.7rem; padding: 0.2em 0.3em; }
             .type-badge { font-size: 0.6rem; padding: 0.2em 0.3em; min-width: auto; white-space: nowrap; }
             .poke-name { word-break: break-all; line-height: 1.25; display: inline-block; font-size: 0.7rem; }
-            /* スマホ時のボタンと数字のサイズ最適化 */
             .save-btn { font-size: 0.95rem; padding: 0.15rem; max-width: 36px; }
             .star-number { font-size: 0.6rem; bottom: -1px; right: 1px; }
         }
@@ -166,13 +163,12 @@
         let rawSaved = localStorage.getItem(LS_KEY);
         let savedData = {}; 
 
-        // ★ 過去の単なる「リスト（配列）」や「オブジェクト」から安全に引き継ぎ
         if (rawSaved) {
             try {
                 let parsed = JSON.parse(rawSaved);
                 if (Array.isArray(parsed)) {
-                    // 古いバージョンからの移行は、一旦すべて「優先度2」として引き継ぐ
-                    parsed.forEach(id => { savedData[id] = 2; });
+                    // 古い配列形式からの移行は、中間値として優先度5を引き継ぐ
+                    parsed.forEach(id => { savedData[id] = 5; });
                     localStorage.setItem(LS_KEY, JSON.stringify(savedData));
                 } else {
                     savedData = parsed;
@@ -212,16 +208,15 @@
                     { 
                         data: 'no', 
                         className: 'text-center', 
-                        orderable: true, // ソート可能に変更
+                        orderable: true,
                         render: function(data, type, row) { 
                             const priority = savedData[data] || 0;
                             
-                            // DataTablesのソート・フィルタ用には数値をそのまま返す
+                            // ★ ソート用に数値を返す (未選択の0は一番下になるよう99にする)
                             if (type === 'sort' || type === 'type') {
-                                return priority;
+                                return priority === 0 ? 99 : priority;
                             }
                             
-                            // 表示（display）用のHTML構築
                             let btnClass = 'btn-outline-secondary';
                             let icon = '☆';
                             
@@ -230,16 +225,17 @@
                                 icon = `★<span class="star-number">${priority}</span>`; 
                             }
                             
-                            // 1～9のドロップダウンメニュー構築
+                            // ★ 1から9へ昇順のドロップダウンメニュー構築
                             let menuItems = '';
-                            for (let i = 9; i >= 1; i--) {
+                            for (let i = 1; i <= 9; i++) {
                                 let label = `★ ${i}`;
-                                if (i === 9) label += ' (最高)';
-                                if (i === 1) label += ' (最低)';
+                                if (i === 1) label += ' (最高)';
+                                if (i === 9) label += ' (最低)';
                                 menuItems += `<li><a class="dropdown-item text-dark fw-bold py-2" href="#" onclick="setPriority(${data}, ${i}, this, event)">${label}</a></li>`;
                             }
+                            // ★ 解除テキストの修正
                             menuItems += `<li><hr class="dropdown-divider m-1"></li>
-                                          <li><a class="dropdown-item text-secondary py-2" href="#" onclick="setPriority(${data}, 0, this, event)">☆ 解除する</a></li>`;
+                                          <li><a class="dropdown-item text-secondary py-2" href="#" onclick="setPriority(${data}, 0, this, event)">☆ 解除</a></li>`;
 
                             return `
                             <div class="dropdown">
@@ -278,7 +274,6 @@
                 
                 let savedMatch = true;
                 if ($('#showSavedOnly').is(':checked')) {
-                    // ★ フィルターONの時は、優先度が1以上のものだけ表示
                     savedMatch = (savedData[pokeInfo.no] > 0);
                 }
 

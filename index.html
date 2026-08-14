@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ポケモンスリープ 実装ポケモン特殊形態対応一覧</title>
+    <!-- ★ タブ名（title）の変更 -->
+    <title>ウッウロボ アメチェッカー - ポケスリ 特殊形態対応一覧</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e293b">
     <link rel="apple-touch-icon" href="icon-192x192.png">
@@ -23,9 +24,7 @@
         .card-table { background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.25rem; overflow: visible !important; }
         .table-responsive { overflow: visible !important; overflow-x: visible !important; overflow-y: visible !important; }
         
-        /* タイプの改行防止 */
         .type-badge { font-size: 0.75rem; padding: 0.3em 0.5em; border-radius: 4px; color: #fff; font-weight: 600; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.1); display: inline-block; min-width: 3.5rem; text-align: center; white-space: nowrap; }
-        
         .type-ノーマル { background-color: #A8A878; } .type-ほのお { background-color: #F08030; } .type-みず { background-color: #6890F0; } .type-でんき { background-color: #F8D030; } .type-くさ { background-color: #78C850; } .type-こおり { background-color: #98D8D8; color: #333; text-shadow: none;} .type-かくとう { background-color: #C03028; } .type-どく { background-color: #A040A0; } .type-じめん { background-color: #E0C068; } .type-ひこう { background-color: #A890F0; } .type-エスパー { background-color: #F85888; } .type-むし { background-color: #A8B820; } .type-いわ { background-color: #B8A038; } .type-ゴースト { background-color: #705898; } .type-ドラゴン { background-color: #7038F8; } .type-あく { background-color: #705848; } .type-はがね { background-color: #B8B8D0; color: #333; text-shadow: none;} .type-フェアリー { background-color: #EE99AC; color: #333; text-shadow: none; }
         
         .badge-regional { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 600; } .badge-mega { background-color: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; font-weight: 600; } .badge-gmax { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; font-weight: 600; }
@@ -37,7 +36,6 @@
         table.dataTable tbody td { padding: 0.45rem 0.15rem !important; font-size: 0.825rem; vertical-align: middle; }
         .no-val { color: #cbd5e1; font-weight: 300; }
         
-        /* 候補保存ボタン用CSS */
         .save-btn { font-size: 1.15rem; padding: 0.1rem 0.4rem; line-height: 1; border-radius: 6px; transition: transform 0.15s, background-color 0.15s; cursor: pointer; }
         .save-btn:active { transform: scale(0.85); }
 
@@ -57,12 +55,10 @@
             .stat-label { font-size: 0.65rem; }
             .controls-wrapper { padding: 0.75rem; }
             div.dataTables_wrapper div.dataTables_info { font-size: 0.75rem; padding-top: 0.5rem; text-align: left !important; }
-            div.dataTables_wrapper div.dataTables_length { text-align: left !important; margin-top: 0.5rem; }
             table.dataTable thead th { font-size: 0.65rem !important; padding: 0.45rem 0.05rem !important; letter-spacing: -0.5px; }
             table.dataTable tbody td { font-size: 0.65rem !important; padding: 0.4rem 0.05rem !important; }
             .badge-regional, .badge-mega, .badge-gmax { font-size: 0.6rem; padding: 0.2em 0.2em; }
             .badge-score { font-size: 0.7rem; padding: 0.2em 0.3em; }
-            
             .type-badge { font-size: 0.6rem; padding: 0.2em 0.3em; min-width: auto; white-space: nowrap; }
             .poke-name { word-break: break-all; line-height: 1.25; display: inline-block; font-size: 0.7rem; }
             .save-btn { font-size: 1rem; padding: 0.1rem 0.3rem; }
@@ -72,9 +68,9 @@
 <body>
     <div class="header-section">
         <div class="container text-center text-md-start">
-            <h1 class="h2 font-weight-bold mb-2">ポケモンスリープ 実装ポケモン特殊形態対応一覧</h1>
-            <!-- ★ 修正部分：説明文の変更 -->
-            <p class="mb-0 text-white-50">アメウッウロボへのアメ投入候補管理ツール</p>
+            <!-- ★ ヘッダー見出しの変更 -->
+            <h1 class="h2 font-weight-bold mb-2">ウッウロボ アメチェッカー</h1>
+            <p class="mb-0 text-white-50">ポケスリ 特殊形態対応一覧</p>
         </div>
     </div>
     <div class="container">
@@ -84,35 +80,43 @@
             <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #be185d;">36</div><div class="stat-label">メガシンカ対応</div></div></div>
             <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #b45309;">9</div><div class="stat-label">キョダイ対応</div></div></div>
         </div>
+        
+        <!-- ★ ルール説明のアコーディオン（タップで開閉）化 -->
         <div class="card card-info-box mb-3">
-            <div class="card-body p-2 p-md-3">
-                <h2 class="h6 fw-bold mb-2 text-primary d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-info-circle-fill me-2 flex-shrink-0" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293-.006-.399-.287-.47l.451-.081.937-.02zM8 4.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
-                    判定基準・点数ルールについて
+            <div class="card-header bg-transparent border-0 p-2 p-md-3" data-bs-toggle="collapse" data-bs-target="#ruleCollapse" style="cursor: pointer;" aria-expanded="false">
+                <h2 class="h6 fw-bold mb-0 text-primary d-flex align-items-center justify-content-between">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-info-circle-fill me-2 flex-shrink-0" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293-.006-.399-.287-.47l.451-.081.937-.02zM8 4.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+                        判定基準・点数ルールについて
+                    </span>
+                    <small class="text-muted fw-normal">▼ タップで開閉</small>
                 </h2>
-                <ul class="mb-0 small text-secondary ps-3" style="line-height: 1.5; font-size: 0.8rem;">
-                    <li class="mb-1"><strong>判定基準：</strong>進化系統のいずれかが対応している場合、系統全体を「○」としています。</li>
-                    <li><strong>点数算定：</strong>特殊形態の未対応項目に応じて加点されます。（すべて非対応で最高6点）
-                        <div class="mt-1 d-flex flex-wrap gap-1">
-                            <span class="badge bg-light text-dark border">リージョンフォーム対応無し：<strong>3点</strong></span>
-                            <span class="badge bg-light text-dark border">メガシンカ対応無し：<strong>2点</strong></span>
-                            <span class="badge bg-light text-dark border">キョダイマックス対応無し：<strong>1点</strong></span>
-                        </div>
-                    </li>
-                </ul>
+            </div>
+            <div id="ruleCollapse" class="collapse">
+                <div class="card-body p-2 p-md-3 pt-0 border-top mt-2">
+                    <ul class="mb-0 small text-secondary ps-3" style="line-height: 1.5; font-size: 0.8rem;">
+                        <li class="mb-1"><strong>判定基準：</strong>進化系統のいずれかが対応している場合、系統全体を「○」としています。</li>
+                        <li><strong>点数算定：</strong>特殊形態の未対応項目に応じて加点されます。（すべて非対応で最高6点）
+                            <div class="mt-1 d-flex flex-wrap gap-1">
+                                <span class="badge bg-light text-dark border">リージョンフォーム対応無し：<strong>3点</strong></span>
+                                <span class="badge bg-light text-dark border">メガシンカ対応無し：<strong>2点</strong></span>
+                                <span class="badge bg-light text-dark border">キョダイマックス対応無し：<strong>1点</strong></span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
+
         <div class="card-table">
             <div class="controls-wrapper">
                 <div class="row g-2 align-items-end">
                     
-                    <!-- 名前検索 (スマホ100%幅 / PC33%幅) -->
                     <div class="col-12 col-md-4 order-1">
                         <label class="form-label fw-bold small text-secondary mb-1">名前で探す</label>
                         <input type="text" id="customSearchInput" class="form-control form-control-sm" placeholder="例: ピカチュウ">
                     </div>
                     
-                    <!-- タイプで絞り込み (スマホ50%幅 / PC33%幅) -->
                     <div class="col-6 col-md-4 order-2 mt-2 mt-md-0">
                         <label class="form-label fw-bold small text-secondary mb-1">タイプで絞り込み</label>
                         <select id="typeFilterSelect" class="form-select form-select-sm">
@@ -120,7 +124,6 @@
                         </select>
                     </div>
                     
-                    <!-- 特殊形態で絞り込み (スマホ50%幅 / PC33%幅) -->
                     <div class="col-6 col-md-4 order-3 mt-2 mt-md-0">
                         <label class="form-label fw-bold small text-secondary mb-1">特殊形態で絞り込み</label>
                         <select id="formFilterSelect" class="form-select form-select-sm">
@@ -128,7 +131,6 @@
                         </select>
                     </div>
 
-                    <!-- 候補トグル (スマホ・PC共通で全体の下部・右寄せに配置) -->
                     <div class="col-12 order-4 mt-2 d-flex align-items-center justify-content-end" style="height: 31px;">
                         <label class="fw-bold text-secondary me-2 mb-0" style="font-size: 0.85rem; cursor: pointer; user-select: none;" for="showSavedOnly">★ 候補のみ表示</label>
                         <div class="form-check form-switch mb-0 p-0 m-0 d-flex align-items-center">
@@ -149,7 +151,7 @@
                 </table>
             </div>
         </div>
-        <footer class="mt-4 text-center text-muted small"><p>非公式ファンツール</p></footer>
+        <!-- ★ フッターの非公式ファンツール表記を削除 -->
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -188,7 +190,9 @@
         $(document).ready(function() {
             table = $('#pokemonTable').DataTable({
                 data: pokemonData,
-                dom: '<"top">rt<"bottom"ilp><"clear">',
+                // ★ DOMとページネーションの変更（件数切替・次へ前へを完全削除）
+                dom: '<"top">rt<"bottom"i><"clear">',
+                paging: false,
                 columns: [
                     { 
                         data: 'no', 
@@ -209,9 +213,14 @@
                     { data: 'gmax', className: 'text-center', render: function(data) { return data === '〇' ? '<span class="badge badge-gmax">〇</span>' : '<span class="no-val">-</span>'; } },
                     { data: 'score', className: 'text-center', render: function(data) { return '<span class="badge badge-score score-' + data + '">' + data + '点</span>'; } }
                 ],
-                pageLength: -1,
-                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "全件"]],
-                language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/ja.json', info: "_TOTAL_ 件中 _START_ から _END_ まで表示" },
+                // ★ 表示テキストのカスタマイズ（～件表示 の形式へ）
+                language: { 
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/ja.json', 
+                    info: "_TOTAL_ 件表示",
+                    infoEmpty: "0 件表示",
+                    infoFiltered: "（全 _MAX_ 件より抽出）",
+                    zeroRecords: "一致するポケモンがいません"
+                },
                 order: [[1, 'asc']]
             });
 

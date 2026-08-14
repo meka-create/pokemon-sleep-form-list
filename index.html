@@ -28,7 +28,6 @@
         
         .badge-regional { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 600; } .badge-mega { background-color: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; font-weight: 600; } .badge-gmax { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; font-weight: 600; }
         
-        /* ★ 新しい10点満点ルール用のスコア色調整 */
         .badge-score { font-size: 0.85rem; padding: 0.3em 0.55em; border-radius: 6px; font-weight: 700; }
         .score-10 { background-color: #fecdd3; color: #9f1239; } 
         .score-9, .score-8 { background-color: #fed7aa; color: #9a3412; } 
@@ -43,23 +42,40 @@
         table.dataTable tbody td { padding: 0.45rem 0.15rem !important; font-size: 0.825rem; vertical-align: middle; }
         .no-val { color: #cbd5e1; font-weight: 300; }
         
-        /* S〜Dランク用のボタンCSS（シンプルで美しい配置） */
+        /* ★ S〜Dランク用の洗練されたボタンCSS（フラットカラー＆シャドウ） */
         .save-btn { 
             font-size: 1.15rem; 
             padding: 0.15rem 0; 
             line-height: 1.2; 
             border-radius: 6px; 
-            transition: transform 0.15s, background-color 0.15s; 
+            transition: transform 0.1s, box-shadow 0.1s; 
             cursor: pointer; 
             width: 100%; 
             max-width: 44px; 
             margin: 0 auto; 
             display: block; 
             text-align: center; 
+            border: none;
+            font-weight: 800;
         }
         .save-btn::after { display: none !important; }
-        .save-btn:active { transform: scale(0.85); }
+        .save-btn:active { transform: scale(0.9); }
         .dropdown-menu { border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-height: 280px; overflow-y: auto; }
+        
+        /* ★ 各ランクの美しいカラーパレット */
+        .rank-s { background-color: #ff4d4f; color: #ffffff; box-shadow: 0 2px 5px rgba(255, 77, 79, 0.4); }
+        .rank-a { background-color: #ff9c6e; color: #ffffff; box-shadow: 0 2px 5px rgba(255, 156, 110, 0.4); }
+        .rank-b { background-color: #95de64; color: #ffffff; box-shadow: 0 2px 5px rgba(149, 222, 100, 0.4); }
+        .rank-c { background-color: #69c0ff; color: #ffffff; box-shadow: 0 2px 5px rgba(105, 192, 255, 0.4); }
+        .rank-d { background-color: #a6a6a6; color: #ffffff; box-shadow: 0 2px 5px rgba(166, 166, 166, 0.4); }
+        .rank-none { background-color: #ffffff; color: #bfbfbf; border: 1.5px dashed #d9d9d9; font-weight: bold; }
+        
+        /* ドロップダウンテキスト用カラー */
+        .color-s { color: #ff4d4f !important; }
+        .color-a { color: #ff9c6e !important; }
+        .color-b { color: #95de64 !important; }
+        .color-c { color: #69c0ff !important; }
+        .color-d { color: #a6a6a6 !important; }
 
         table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc { padding-right: 0.9rem !important; }
         table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after { right: 0.1rem !important; }
@@ -114,7 +130,6 @@
             <div id="ruleCollapse" class="collapse">
                 <div class="card-body p-2 p-md-3 pt-0 border-top mt-2">
                     <ul class="mb-0 small text-secondary ps-3" style="line-height: 1.5; font-size: 0.8rem;">
-                        <!-- ★ テキストと配点を変更 -->
                         <li><strong>点数算定：</strong>特殊形態の未対応項目に応じて加点されます。（すべて非対応で最高10点）
                             <div class="mt-1 d-flex flex-wrap gap-1">
                                 <span class="badge bg-light text-dark border">リージョンフォーム無し：<strong>5点</strong></span>
@@ -124,7 +139,8 @@
                         </li>
                     </ul>
                     <div class="mt-2 pt-2 border-top text-muted" style="font-size: 0.7rem; line-height: 1.4;">
-                        ・候補には6点以上のポケモンを推奨<br>
+                        <!-- ★ テキストを7点以上に修正 -->
+                        ・候補には7点以上のポケモンを推奨<br>
                         ・追加進化が未実装のマンキーは候補外を推奨
                     </div>
                 </div>
@@ -182,23 +198,19 @@
         let rawSaved = localStorage.getItem(LS_KEY);
         let savedData = {}; 
 
-        // ★ 過去バージョンからのデータ自動移行処理（S〜Dランクへのマッピング）
         if (rawSaved) {
             try {
                 let parsed = JSON.parse(rawSaved);
                 if (Array.isArray(parsed)) {
-                    // 最も古い配列形式はBランク（中間）へ
                     parsed.forEach(id => { savedData[id] = 3; });
                     localStorage.setItem(LS_KEY, JSON.stringify(savedData));
                 } else {
-                    // ★1〜9形式だった場合、新しいS〜D形式に翻訳して保存
                     let needsMigration = false;
                     for (let key in parsed) { if (parsed[key] > 5) needsMigration = true; }
                     
                     if (needsMigration) {
                         for (let key in parsed) {
                             let oldVal = parsed[key];
-                            // 旧1,2 ➔ S(1) / 旧3,4 ➔ A(2) / 旧5 ➔ B(3) / 旧6,7 ➔ C(4) / 旧8,9 ➔ D(5)
                             if (oldVal <= 2) savedData[key] = 1;
                             else if (oldVal <= 4) savedData[key] = 2;
                             else if (oldVal === 5) savedData[key] = 3;
@@ -215,7 +227,6 @@
             }
         }
 
-        // ★ 即時反映対応の優先度セット関数
         window.setPriority = function(no, priority, element, event) {
             if (event) { event.preventDefault(); }
             if (priority === 0) {
@@ -248,30 +259,29 @@
                         render: function(data, type, row) { 
                             const priority = savedData[data] || 0;
                             
-                            // ★ ソート処理：1(S)～5(D)の昇順、未選択(0)は一番下(99)
                             if (type === 'sort' || type === 'type') {
                                 return priority === 0 ? 99 : priority;
                             }
                             
-                            let btnClass = 'btn-outline-secondary';
-                            let icon = '☆';
+                            // ★ 未選択状態は「☆」から「枠ありの＋」に変更
+                            let btnClass = 'rank-none';
+                            let icon = '＋';
                             
-                            // ★ S〜Dランクの美しいボタン表示
-                            if (priority === 1) { btnClass = 'btn-danger text-white'; icon = '<span class="fw-bold">S</span>'; }
-                            else if (priority === 2) { btnClass = 'btn-warning text-dark'; icon = '<span class="fw-bold">A</span>'; }
-                            else if (priority === 3) { btnClass = 'btn-success text-white'; icon = '<span class="fw-bold">B</span>'; }
-                            else if (priority === 4) { btnClass = 'btn-info text-white'; icon = '<span class="fw-bold">C</span>'; }
-                            else if (priority === 5) { btnClass = 'btn-secondary text-white'; icon = '<span class="fw-bold">D</span>'; }
+                            if (priority === 1) { btnClass = 'rank-s'; icon = 'S'; }
+                            else if (priority === 2) { btnClass = 'rank-a'; icon = 'A'; }
+                            else if (priority === 3) { btnClass = 'rank-b'; icon = 'B'; }
+                            else if (priority === 4) { btnClass = 'rank-c'; icon = 'C'; }
+                            else if (priority === 5) { btnClass = 'rank-d'; icon = 'D'; }
                             
-                            // ★ ドロップダウンメニューの構築（Sが一番上）
+                            // ★ 余計なテキストを削ぎ落としたメニュー
                             let menuItems = `
-                                <li><a class="dropdown-item text-danger fw-bold py-2" href="#" onclick="setPriority(${data}, 1, this, event)">S ランク</a></li>
-                                <li><a class="dropdown-item text-warning fw-bold py-2" href="#" onclick="setPriority(${data}, 2, this, event)">A ランク</a></li>
-                                <li><a class="dropdown-item text-success fw-bold py-2" href="#" onclick="setPriority(${data}, 3, this, event)">B ランク</a></li>
-                                <li><a class="dropdown-item text-info fw-bold py-2" href="#" onclick="setPriority(${data}, 4, this, event)">C ランク</a></li>
-                                <li><a class="dropdown-item text-secondary fw-bold py-2" href="#" onclick="setPriority(${data}, 5, this, event)">D ランク</a></li>
+                                <li><a class="dropdown-item color-s fw-bold py-2" href="#" onclick="setPriority(${data}, 1, this, event)">S</a></li>
+                                <li><a class="dropdown-item color-a fw-bold py-2" href="#" onclick="setPriority(${data}, 2, this, event)">A</a></li>
+                                <li><a class="dropdown-item color-b fw-bold py-2" href="#" onclick="setPriority(${data}, 3, this, event)">B</a></li>
+                                <li><a class="dropdown-item color-c fw-bold py-2" href="#" onclick="setPriority(${data}, 4, this, event)">C</a></li>
+                                <li><a class="dropdown-item color-d fw-bold py-2" href="#" onclick="setPriority(${data}, 5, this, event)">D</a></li>
                                 <li><hr class="dropdown-divider m-1"></li>
-                                <li><a class="dropdown-item text-secondary py-2" href="#" onclick="setPriority(${data}, 0, this, event)">☆ 解除</a></li>
+                                <li><a class="dropdown-item text-secondary py-2" href="#" onclick="setPriority(${data}, 0, this, event)">解除</a></li>
                             `;
 
                             return `
@@ -279,7 +289,7 @@
                                 <button class="btn btn-sm ${btnClass} save-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-no="${data}">
                                     ${icon}
                                 </button>
-                                <ul class="dropdown-menu shadow-sm dropdown-menu-start" style="min-width: 100px; font-size: 0.85rem; z-index: 1050;">
+                                <ul class="dropdown-menu shadow-sm dropdown-menu-start" style="min-width: 80px; font-size: 0.95rem; z-index: 1050; text-align: center;">
                                     ${menuItems}
                                 </ul>
                             </div>`;
@@ -291,7 +301,17 @@
                     { data: 'regional', className: 'text-center', render: function(data) { return data === '〇' ? '<span class="badge badge-regional">〇</span>' : '<span class="no-val">-</span>'; } },
                     { data: 'mega', className: 'text-center', render: function(data) { return data === '〇' ? '<span class="badge badge-mega">〇</span>' : '<span class="no-val">-</span>'; } },
                     { data: 'gmax', className: 'text-center', render: function(data) { return data === '〇' ? '<span class="badge badge-gmax">〇</span>' : '<span class="no-val">-</span>'; } },
-                    { data: 'score', className: 'text-center', render: function(data) { return '<span class="badge badge-score score-' + data + '">' + data + '点</span>'; } }
+                    { 
+                        // ★ 点数の文字列ソートバグ修正（Number型として扱う）
+                        data: 'score', 
+                        className: 'text-center', 
+                        render: function(data, type) { 
+                            if (type === 'sort' || type === 'type') {
+                                return Number(data);
+                            }
+                            return '<span class="badge badge-score score-' + data + '">' + data + '点</span>'; 
+                        } 
+                    }
                 ],
                 language: { 
                     url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/ja.json', 

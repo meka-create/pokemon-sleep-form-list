@@ -35,12 +35,31 @@
         table.dataTable tbody td { padding: 0.45rem 0.15rem !important; font-size: 0.825rem; vertical-align: middle; }
         .no-val { color: #cbd5e1; font-weight: 300; }
         
-        .save-btn { position: relative; font-size: 1.15rem; padding: 0.1rem 0.4rem; line-height: 1.1; border-radius: 6px; transition: transform 0.15s, background-color 0.15s; cursor: pointer; width: 100%; max-width: 44px; margin: 0 auto; display: block; text-align: center; }
+        /* ★ 美しくシンプルな候補保存ボタン用CSS（並列配置） */
+        .save-btn { 
+            font-size: 1.1rem; 
+            padding: 0.2rem 0; 
+            line-height: 1.2; 
+            border-radius: 6px; 
+            transition: transform 0.15s, background-color 0.15s; 
+            cursor: pointer; 
+            width: 100%; 
+            max-width: 44px; 
+            margin: 0 auto; 
+            display: block; 
+            text-align: center; 
+        }
         .save-btn::after { display: none !important; }
         .save-btn:active { transform: scale(0.85); }
         .dropdown-menu { border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-height: 280px; overflow-y: auto; }
         
-        .star-number { position: absolute; bottom: 0px; right: 2px; font-size: 0.7rem; line-height: 1; font-weight: 900; color: #212529; }
+        /* ★ 数字部分の美しいスタイリング（文字の横に添える） */
+        .star-number { 
+            font-size: 0.75em; 
+            font-weight: 800; 
+            margin-left: 1px; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+        }
 
         table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc { padding-right: 0.9rem !important; }
         table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after { right: 0.1rem !important; }
@@ -63,8 +82,8 @@
             .badge-score { font-size: 0.7rem; padding: 0.2em 0.3em; }
             .type-badge { font-size: 0.6rem; padding: 0.2em 0.3em; min-width: auto; white-space: nowrap; }
             .poke-name { word-break: break-all; line-height: 1.25; display: inline-block; font-size: 0.7rem; }
-            .save-btn { font-size: 0.95rem; padding: 0.15rem; max-width: 36px; }
-            .star-number { font-size: 0.6rem; bottom: -1px; right: 1px; }
+            /* スマホ時のボタン調整 */
+            .save-btn { font-size: 0.95rem; padding: 0.15rem 0; max-width: 38px; }
         }
     </style>
 </head>
@@ -188,7 +207,6 @@
             }
             localStorage.setItem(LS_KEY, JSON.stringify(savedData));
             
-            // 該当行を特定してDataTablesに「データが変わった」と教え、即座に再描画させる
             const tr = $(element).closest('tr');
             if (tr.length > 0 && table) {
                 table.row(tr).invalidate().draw(false);
@@ -222,18 +240,16 @@
                             
                             if (priority > 0) { 
                                 btnClass = 'btn-warning text-dark'; 
+                                // ★ シンプルで美しい「★ 1」のデザイン
                                 icon = `★<span class="star-number">${priority}</span>`; 
                             }
                             
-                            // ★ 1から9へ昇順のドロップダウンメニュー構築
+                            // ★ 1(最高)～9(最低)の順でメニュー構築、無駄なテキストを削除
                             let menuItems = '';
                             for (let i = 1; i <= 9; i++) {
                                 let label = `★ ${i}`;
-                                if (i === 1) label += ' (最高)';
-                                if (i === 9) label += ' (最低)';
                                 menuItems += `<li><a class="dropdown-item text-dark fw-bold py-2" href="#" onclick="setPriority(${data}, ${i}, this, event)">${label}</a></li>`;
                             }
-                            // ★ 解除テキストの修正
                             menuItems += `<li><hr class="dropdown-divider m-1"></li>
                                           <li><a class="dropdown-item text-secondary py-2" href="#" onclick="setPriority(${data}, 0, this, event)">☆ 解除</a></li>`;
 
@@ -242,7 +258,7 @@
                                 <button class="btn btn-sm ${btnClass} save-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-no="${data}">
                                     ${icon}
                                 </button>
-                                <ul class="dropdown-menu shadow-sm dropdown-menu-start" style="min-width: 120px; font-size: 0.85rem; z-index: 1050;">
+                                <ul class="dropdown-menu shadow-sm dropdown-menu-start" style="min-width: 90px; font-size: 0.85rem; z-index: 1050;">
                                     ${menuItems}
                                 </ul>
                             </div>`;

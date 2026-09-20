@@ -1,373 +1,1023 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ウッウロボ アメチェッカー - ポケスリ 特殊形態対応一覧</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1e293b">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Noto Sans JP', sans-serif; background-color: #f4f6f9; color: #2b2d42; padding-bottom: 3rem; overflow-x: hidden; }
-        .header-section { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; padding: 2rem 0 1.5rem 0; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
-        .stat-card { background: #ffffff; border-radius: 12px; padding: 0.85rem 0.5rem; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center; transition: transform 0.2s; }
-        .stat-card:hover { transform: translateY(-2px); }
-        .stat-num { font-size: 1.5rem; font-weight: 700; color: #2563eb; line-height: 1.2; }
-        .stat-label { font-size: 0.75rem; color: #64748b; font-weight: 500; margin-top: 0.2rem; }
-        .card-info-box { background: #ffffff; border-radius: 12px; border: 1px solid #cbd5e1; border-left: 5px solid #2563eb; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .card-table { background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.25rem; overflow: visible !important; }
-        .table-responsive { overflow: visible !important; overflow-x: visible !important; overflow-y: visible !important; }
-        
-        .type-badge { font-size: 0.75rem; padding: 0.3em 0.5em; border-radius: 4px; color: #fff; font-weight: 600; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.1); display: inline-block; min-width: 3.5rem; text-align: center; white-space: nowrap; }
-        .type-ノーマル { background-color: #A8A878; } .type-ほのお { background-color: #F08030; } .type-みず { background-color: #6890F0; } .type-でんき { background-color: #F8D030; } .type-くさ { background-color: #78C850; } .type-こおり { background-color: #98D8D8; color: #333; text-shadow: none;} .type-かくとう { background-color: #C03028; } .type-どく { background-color: #A040A0; } .type-じめん { background-color: #E0C068; } .type-ひこう { background-color: #A890F0; } .type-エスパー { background-color: #F85888; } .type-むし { background-color: #A8B820; } .type-いわ { background-color: #B8A038; } .type-ゴースト { background-color: #705898; } .type-ドラゴン { background-color: #7038F8; } .type-あく { background-color: #705848; } .type-はがね { background-color: #B8B8D0; color: #333; text-shadow: none;} .type-フェアリー { background-color: #EE99AC; color: #333; text-shadow: none; }
-        
-        .badge-regional { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 600; } .badge-mega { background-color: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; font-weight: 600; } .badge-gmax { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; font-weight: 600; }
-        
-        .badge-score { font-size: 0.85rem; padding: 0.3em 0.55em; border-radius: 6px; font-weight: 700; }
-        .score-10 { background-color: #fecdd3; color: #9f1239; } 
-        .score-9, .score-8 { background-color: #fed7aa; color: #9a3412; } 
-        .score-7, .score-6 { background-color: #fef08a; color: #854d0e; } 
-        .score-5, .score-4 { background-color: #d9f99d; color: #3f6212; } 
-        .score-3, .score-2 { background-color: #bfdbfe; color: #1e40af; } 
-        .score-1, .score-0 { background-color: #f1f5f9; color: #64748b; }
-        
-        .controls-wrapper { background-color: #f8fafc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; }
-        #pokemonTable { width: 100% !important; table-layout: fixed; margin: 0 !important; }
-        table.dataTable thead th { position: -webkit-sticky !important; position: sticky !important; top: 0 !important; z-index: 100 !important; background-color: #f8fafc !important; color: #475569; font-weight: 700; border-bottom: 2px solid #cbd5e1 !important; padding: 0.5rem 0.15rem !important; font-size: 0.825rem; white-space: nowrap !important; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); border-top: none !important; outline: 1px solid #cbd5e1; outline-offset: -1px; }
-        table.dataTable tbody td { padding: 0.45rem 0.15rem !important; font-size: 0.825rem; vertical-align: middle; }
-        .no-val { color: #cbd5e1; font-weight: 300; }
-        
-        .save-btn { 
-            font-size: 1.15rem; 
-            padding: 0.15rem 0; 
-            line-height: 1.2; 
-            border-radius: 6px; 
-            transition: transform 0.1s, box-shadow 0.1s; 
-            cursor: pointer; 
-            width: 100%; 
-            max-width: 44px; 
-            margin: 0 auto; 
-            display: block; 
-            text-align: center; 
-            border: none;
-            font-weight: 800;
-        }
-        .save-btn::after { display: none !important; }
-        .save-btn:active { transform: scale(0.9); }
-        .dropdown-menu { border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-height: 280px; overflow-y: auto; }
-        
-        .rank-s { background-color: #ff4d4f; color: #ffffff; box-shadow: 0 2px 5px rgba(255, 77, 79, 0.4); }
-        .rank-a { background-color: #ff9c6e; color: #ffffff; box-shadow: 0 2px 5px rgba(255, 156, 110, 0.4); }
-        .rank-b { background-color: #95de64; color: #ffffff; box-shadow: 0 2px 5px rgba(149, 222, 100, 0.4); }
-        .rank-c { background-color: #69c0ff; color: #ffffff; box-shadow: 0 2px 5px rgba(105, 192, 255, 0.4); }
-        .rank-d { background-color: #a6a6a6; color: #ffffff; box-shadow: 0 2px 5px rgba(166, 166, 166, 0.4); }
-        .rank-none { background-color: #ffffff; color: #bfbfbf; border: 1.5px dashed #d9d9d9; font-weight: bold; }
-        
-        .color-s { color: #ff4d4f !important; }
-        .color-a { color: #ff9c6e !important; }
-        .color-b { color: #95de64 !important; }
-        .color-c { color: #69c0ff !important; }
-        .color-d { color: #a6a6a6 !important; }
-
-        table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc { padding-right: 0.9rem !important; }
-        table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after { right: 0.1rem !important; }
-        
-        @media (max-width: 576px) {
-            .container { padding-left: 0.4rem; padding-right: 0.4rem; }
-            .header-section { padding: 1.25rem 0.5rem 1rem 0.5rem; margin-bottom: 1rem; }
-            .header-section h1 { font-size: 1.15rem !important; line-height: 1.4; }
-            .header-section p { font-size: 0.75rem !important; }
-            .card-table { padding: 0.4rem; border-radius: 12px; }
-            .card-info-box { padding: 0.5rem !important; }
-            .stat-card { padding: 0.4rem 0.2rem; }
-            .stat-num { font-size: 1.15rem; }
-            .stat-label { font-size: 0.65rem; }
-            .controls-wrapper { padding: 0.75rem; }
-            div.dataTables_wrapper div.dataTables_info { font-size: 0.75rem; padding-top: 0.5rem; text-align: left !important; }
-            table.dataTable thead th { font-size: 0.65rem !important; padding: 0.45rem 0.05rem !important; letter-spacing: -0.5px; }
-            table.dataTable tbody td { font-size: 0.65rem !important; padding: 0.4rem 0.05rem !important; }
-            .badge-regional, .badge-mega, .badge-gmax { font-size: 0.6rem; padding: 0.2em 0.2em; }
-            .badge-score { font-size: 0.7rem; padding: 0.2em 0.3em; }
-            .type-badge { font-size: 0.6rem; padding: 0.2em 0.3em; min-width: auto; white-space: nowrap; }
-            .poke-name { word-break: break-all; line-height: 1.25; display: inline-block; font-size: 0.7rem; }
-            .save-btn { font-size: 1rem; padding: 0.15rem 0; max-width: 38px; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; connect-src 'none'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>ミュウツーサブレ最適化ツール</title>
+  <meta name="description" content="ポケモンスリープのミュウツーサブレ運用を、現在の在庫・フレンドポイント・残り出会い回数から最適化するツール。">
+  <link rel="canonical" href="https://meka-create.github.io/pokemonsleep-sable-opt/">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <meta name="theme-color" content="#9333ea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="ミュウツーサブレOpt">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ミュウツーサブレ最適化ツール">
+  <meta property="og:title" content="ミュウツーサブレ最適化ツール">
+  <meta property="og:description" content="ポケモンスリープのミュウツーサブレ運用を、現在の在庫・フレンドポイント・残り出会い回数から最適化するツール。">
+  <meta property="og:url" content="https://meka-create.github.io/pokemonsleep-sable-opt/">
+  <meta property="og:image" content="https://meka-create.github.io/pokemonsleep-sable-opt/ogp-card.png">
+  <meta property="og:image:width" content="1716">
+  <meta property="og:image:height" content="917">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ミュウツーサブレ最適化ツール">
+  <meta name="twitter:description" content="ポケモンスリープのミュウツーサブレ運用を、現在の在庫・フレンドポイント・残り出会い回数から最適化するツール。">
+  <meta name="twitter:image" content="https://meka-create.github.io/pokemonsleep-sable-opt/ogp-card.png">
+  <style>
+    :root {
+      --gray-50:#f9fafb; --gray-100:#f3f4f6; --gray-200:#e5e7eb; --gray-300:#d1d5db;
+      --gray-400:#9ca3af; --gray-500:#6b7280; --gray-600:#4b5563; --gray-700:#374151; --gray-800:#1f2937;
+      --purple-50:#faf5ff; --purple-100:#f3e8ff; --purple-200:#e9d5ff; --purple-400:#c084fc;
+      --purple-500:#a855f7; --purple-600:#9333ea; --purple-700:#7e22ce; --purple-800:#6b21a8; --purple-900:#581c87;
+      --green-600:#16a34a;
+    }
+    * { box-sizing:border-box; }
+    html,body { margin:0; min-height:100%; }
+    body { background:var(--gray-100); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; -webkit-tap-highlight-color:transparent; color:var(--gray-800); }
+    ::-webkit-scrollbar { display:none; }
+    button,input,select { font:inherit; }
+    button { border:0; cursor:pointer; }
+    button:disabled { cursor:not-allowed; }
+    input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+    input[type="number"] { -moz-appearance:textfield; }
+    .app { min-height:100vh; max-width:448px; margin:0 auto; background:var(--gray-200); display:flex; flex-direction:column; padding-bottom:40px; }
+    header { background:#fff; padding:32px 16px 12px; box-shadow:0 1px 3px rgba(0,0,0,.10); position:sticky; top:0; z-index:10; }
+    h1 { margin:0; font-size:18px; line-height:28px; font-weight:900; color:var(--purple-900); letter-spacing:-.02em; display:flex; align-items:center; gap:8px; }
+    .opt { background:var(--purple-600); color:#fff; padding:4px 8px; border-radius:4px; font-size:12px; line-height:16px; }
+    main { flex:1; padding:16px; display:flex; flex-direction:column; gap:16px; }
+    .card { background:#fff; border-radius:16px; box-shadow:0 1px 3px rgba(0,0,0,.08); padding:20px; }
+    .main-card { border-top:4px solid var(--purple-600); }
+    .section-title { margin:0 0 16px; font-size:14px; font-weight:700; color:var(--gray-500); }
+    .row-between { display:flex; align-items:center; justify-content:space-between; }
+    .label { font-size:14px; color:var(--gray-600); font-weight:700; }
+    .gauge-tools { display:flex; align-items:center; gap:8px; }
+    .reset-btn { font-size:12px; background:var(--gray-200); padding:4px 8px; border-radius:4px; font-weight:700; color:var(--gray-600); }
+    .reset-btn:hover,.reset-btn:active { background:var(--gray-300); }
+    .gauge-wrap { display:flex; align-items:baseline; }
+    #gaugeInput { width:48px; padding:0; text-align:right; font-weight:900; color:var(--purple-700); font-size:24px; background:transparent; border:0; border-bottom:2px dashed var(--purple-400); outline:none; }
+    #gaugeInput:focus { border-bottom-style:solid; border-color:var(--purple-600); }
+    .gauge-total { font-size:24px; font-weight:900; color:var(--purple-700); margin-left:4px; }
+    .progress { width:100%; background:var(--gray-200); border-radius:999px; height:12px; margin:8px 0 20px; overflow:hidden; }
+    #progressBar { background:var(--purple-600); height:12px; border-radius:999px; transition:width .5s ease-out; }
+    .chance-box { display:flex; gap:16px; margin-bottom:16px; background:var(--purple-50); padding:12px; border-radius:12px; border:1px solid var(--purple-100); }
+    .chance-label { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; width:100%; cursor:pointer; color:var(--purple-900); }
+    .chance-label.disabled { color:var(--gray-400); opacity:.7; cursor:not-allowed; }
+    #chanceToggle { width:20px; height:20px; accent-color:var(--purple-600); }
+    .setting-line { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; font-size:14px; font-weight:500; color:var(--gray-700); }
+    #guaranteeSelect { border:1px solid var(--gray-300); border-radius:4px; padding:4px; background:var(--gray-50); outline:none; }
+    #guaranteeSelect:focus { box-shadow:0 0 0 2px rgba(168,85,247,.35); }
+    #feedStatus { margin:0 0 16px; text-align:right; font-size:12px; color:var(--gray-400); }
+    .action-panel { background:linear-gradient(to bottom,var(--purple-50),#fff); border-radius:16px; box-shadow:inset 0 1px 3px rgba(0,0,0,.06); padding:20px; text-align:center; border:1px solid var(--gray-100); position:relative; }
+    .eyebrow { margin:0 0 4px; font-size:12px; color:var(--gray-500); font-weight:700; }
+    #nextMove { margin:0 0 12px; font-size:30px; line-height:36px; font-weight:900; color:var(--purple-900); transition:opacity .2s; }
+    .dim { opacity:.5; }
+    .detail { margin-bottom:16px; background:rgba(255,255,255,.8); border-radius:8px; padding:12px; font-size:14px; color:var(--gray-700); box-shadow:0 1px 3px rgba(0,0,0,.06); border:1px solid var(--purple-100); text-align:left; transition:opacity .2s; }
+    .prob-line { display:flex; justify-content:space-between; border-bottom:1px solid var(--gray-100); padding-bottom:8px; margin-bottom:8px; }
+    .prob-label { font-weight:700; color:var(--gray-600); }
+    #catchProb { font-weight:900; color:var(--purple-700); }
+    .route-label { display:block; margin-bottom:8px; font-size:12px; font-weight:700; color:var(--gray-600); }
+    #route { display:flex; flex-wrap:wrap; gap:4px; align-items:center; font-size:12px; color:var(--gray-600); }
+    .route-step { background:var(--purple-100); color:var(--purple-800); padding:4px 8px; border-radius:4px; font-weight:500; }
+    .route-arrow { color:var(--gray-400); }
+    .route-get { color:var(--green-600); font-weight:700; margin-left:4px; }
+    .route-next { color:var(--gray-500); font-weight:700; margin-left:4px; font-size:12px; }
+    .help { margin:0 0 8px; font-size:12px; color:var(--gray-400); }
+    .result-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; }
+    .result-btn { padding:12px 8px; border-radius:12px; font-weight:700; box-shadow:0 1px 3px rgba(0,0,0,.10); transition:transform .08s,background .15s,opacity .15s; }
+    .result-btn:active:not(:disabled) { transform:scale(.95); }
+    .normal { background:#fff; border:1px solid var(--purple-200); color:var(--purple-700); }
+    .normal:active:not(:disabled) { background:var(--purple-100); }
+    .big { background:var(--purple-600); color:#fff; }
+    .big:active:not(:disabled) { background:var(--purple-700); }
+    .super { background:linear-gradient(to right,#facc15,#f97316); color:#fff; }
+    .full { background:var(--gray-400); color:#fff; }
+    .full:active:not(:disabled) { background:var(--gray-500); }
+    .disabled { opacity:.5; }
+    .wait { cursor:wait !important; }
+    .message { margin-bottom:16px; border-radius:8px; padding:16px; font-size:14px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+    .message h3 { margin:0 0 4px; font-size:18px; font-weight:900; }
+    .message p { margin:0; font-size:12px; font-weight:700; line-height:1.5; }
+    .full-message { background:var(--gray-100); color:var(--gray-700); border:1px solid var(--gray-200); }
+    .full-message h3 { color:var(--gray-600); }
+    .full-message p { color:var(--gray-500); }
+    .pass-message { background:var(--purple-50); color:var(--purple-900); border:1px solid var(--purple-200); }
+    .undo-btn { width:100%; margin-top:8px; padding:12px; background:var(--gray-200); color:var(--gray-700); font-weight:700; font-size:14px; border-radius:12px; transition:background .15s; display:flex; align-items:center; justify-content:center; gap:4px; }
+    .undo-btn:hover,.undo-btn:active { background:var(--gray-300); }
+    .next-encounter { width:100%; margin-top:16px; padding:16px; background:var(--purple-100); color:var(--purple-700); font-weight:900; font-size:14px; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,.06); transition:background .15s; }
+    .next-encounter:hover,.next-encounter:active { background:var(--purple-200); }
+    .expect-card { display:flex; align-items:center; justify-content:space-between; }
+    .expect-card h2,.settings-head h2 { margin:0; font-size:14px; font-weight:700; color:var(--gray-800); }
+    .expect-card p { margin:2px 0 0; font-size:12px; color:var(--gray-400); }
+    .expect-number { text-align:right; transition:opacity .2s; }
+    #expectedTotal { font-size:24px; font-weight:900; color:var(--purple-700); }
+    .unit { font-size:14px; color:var(--gray-500); margin-left:4px; }
+    .settings-card { padding-bottom:32px; }
+    .settings-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .toggle-label { display:flex; align-items:center; cursor:pointer; }
+    #premiumToggle { position:absolute; opacity:0; pointer-events:none; }
+    .toggle { position:relative; width:40px; height:24px; border-radius:999px; background:var(--gray-300); transition:background .2s; }
+    .toggle.on { background:var(--purple-500); }
+    .toggle-dot { position:absolute; left:4px; top:4px; width:16px; height:16px; border-radius:50%; background:#fff; transition:transform .2s; }
+    .toggle.on .toggle-dot { transform:translateX(16px); }
+    #premiumLabel { margin-left:8px; font-size:12px; font-weight:700; color:var(--gray-500); }
+    #premiumLabel.on { color:var(--purple-700); }
+    .input-list { display:flex; flex-direction:column; gap:12px; }
+    .input-row { display:flex; justify-content:space-between; align-items:center; background:var(--gray-50); padding:8px; border-radius:8px; border:1px solid var(--gray-100); }
+    .input-label { font-size:14px; font-weight:500; color:var(--gray-700); }
+    .input-controls { display:flex; gap:8px; align-items:center; }
+    .inf-slot { width:32px; display:flex; justify-content:center; }
+    .inf-btn { padding:4px 8px; background:var(--purple-100); color:var(--purple-700); border-radius:4px; font-size:12px; font-weight:700; }
+    .inf-btn:hover,.inf-btn:active { background:var(--purple-200); }
+    .stepper { display:flex; gap:4px; align-items:center; }
+    .step-btn { width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:6px; font-weight:700; font-size:18px; background:var(--gray-200); color:var(--gray-700); }
+    .step-btn:active:not(:disabled) { background:var(--gray-300); }
+    .step-btn:disabled { background:var(--gray-100); color:var(--gray-300); }
+    .count-input { width:48px; padding:4px; border:1px solid var(--gray-300); border-radius:6px; text-align:center; font-weight:700; color:var(--gray-700); outline:none; background:#fff; }
+    .count-input:focus { box-shadow:0 0 0 2px rgba(192,132,252,.5); }
+    #applyWrap { margin-top:20px; }
+    .apply-btn { width:100%; background:var(--purple-600); color:#fff; padding:12px; border-radius:12px; font-weight:700; box-shadow:0 4px 6px rgba(0,0,0,.10); font-size:18px; transition:background .15s,transform .08s; }
+    .apply-btn:hover:not(:disabled) { background:var(--purple-700); }
+    .apply-btn:active:not(:disabled) { transform:scale(.95); }
+    .fade-in { animation:fadeIn .3s ease-in-out; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+    [hidden] { display:none !important; }
+  </style>
 </head>
 <body>
-    <div class="header-section">
-        <div class="container text-center text-md-start">
-            <h1 class="h2 font-weight-bold mb-2">ウッウロボ アメチェッカー</h1>
-            <p class="mb-0 text-white-50">ポケスリ 特殊形態対応一覧</p>
+  <div class="app">
+    <header><h1><span class="opt">Opt</span>ミュウツーサブレ</h1></header>
+    <main>
+      <section class="card main-card">
+        <h2 class="section-title">実践シミュレーター</h2>
+        <div class="row-between" style="margin-bottom:8px">
+          <span class="label">フレンドポイント</span>
+          <div class="gauge-tools">
+            <button id="resetGauge" class="reset-btn">リセット</button>
+            <div class="gauge-wrap"><input id="gaugeInput" type="number" inputmode="numeric" min="0" max="30"><span class="gauge-total">/ 30</span></div>
+          </div>
         </div>
-    </div>
-    <div class="container">
-        <div class="row g-2 g-md-3 mb-3">
-            <!-- ★ 統計カードの文言をスッキリとした名詞に統一 -->
-            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num">104</div><div class="stat-label">アメの種類</div></div></div>
-            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #0369a1;">16</div><div class="stat-label">リージョンフォーム</div></div></div>
-            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #be185d;">36</div><div class="stat-label">メガシンカ</div></div></div>
-            <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-num" style="color: #b45309;">9</div><div class="stat-label">キョダイマックス</div></div></div>
-        </div>
-        
-        <div class="card card-info-box mb-3">
-            <div class="card-header bg-transparent border-0 p-2 p-md-3" data-bs-toggle="collapse" data-bs-target="#ruleCollapse" style="cursor: pointer;" aria-expanded="false">
-                <h2 class="h6 fw-bold mb-0 text-primary d-flex align-items-center justify-content-between">
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-info-circle-fill me-2 flex-shrink-0" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293-.006-.399-.287-.47l.451-.081.937-.02zM8 4.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
-                        点数ルールについて
-                    </span>
-                    <small class="text-muted fw-normal">▼</small>
-                </h2>
-            </div>
-            <div id="ruleCollapse" class="collapse">
-                <div class="card-body p-2 p-md-3 pt-0 border-top mt-2">
-                    <ul class="mb-0 small text-secondary ps-3" style="line-height: 1.5; font-size: 0.8rem;">
-                        <li><strong>点数算定：</strong>特殊形態の未対応項目に応じて加点されます。（すべて非対応で最高10点）
-                            <div class="mt-1 d-flex flex-wrap gap-1">
-                                <span class="badge bg-light text-dark border">リージョンフォーム無し：<strong>5点</strong></span>
-                                <span class="badge bg-light text-dark border">メガシンカ無し：<strong>3点</strong></span>
-                                <span class="badge bg-light text-dark border">キョダイマックス無し：<strong>2点</strong></span>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="mt-2 pt-2 border-top text-muted" style="font-size: 0.7rem; line-height: 1.4;">
-                        <!-- ★ 注釈を推奨ベースの簡潔な2文に変更 -->
-                        ・候補に選ぶ目安は「7点以上」推奨<br>
-                        ・マンキーは追加進化未実装のため候補外を推奨
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="progress"><div id="progressBar"></div></div>
 
-        <div class="card-table">
-            <div class="controls-wrapper">
-                <div class="row g-2 align-items-end">
-                    <div class="col-12 col-md-4 order-1">
-                        <label class="form-label fw-bold small text-secondary mb-1">名前で探す</label>
-                        <input type="text" id="customSearchInput" class="form-control form-control-sm" placeholder="例: ピカチュウ">
-                    </div>
-                    <div class="col-6 col-md-4 order-2 mt-2 mt-md-0">
-                        <label class="form-label fw-bold small text-secondary mb-1">タイプで絞り込み</label>
-                        <select id="typeFilterSelect" class="form-select form-select-sm">
-                            <option value="all">すべてのタイプ</option><option value="ノーマル">ノーマル</option><option value="ほのお">ほのお</option><option value="みず">みず</option><option value="でんき">でんき</option><option value="くさ">くさ</option><option value="こおり">こおり</option><option value="かくとう">かくとう</option><option value="どく">どく</option><option value="じめん">じめん</option><option value="ひこう">ひこう</option><option value="エスパー">エスパー</option><option value="むし">むし</option><option value="いわ">いわ</option><option value="ゴースト">ゴースト</option><option value="ドラゴン">ドラゴン</option><option value="あく">あく</option><option value="はがね">はがね</option><option value="フェアリー">フェアリー</option>
-                        </select>
-                    </div>
-                    <div class="col-6 col-md-4 order-3 mt-2 mt-md-0">
-                        <label class="form-label fw-bold small text-secondary mb-1">特殊形態で絞り込み</label>
-                        <!-- ★ 選択ボックスのテキストから「対応」などを削除しシンプルに統一 -->
-                        <select id="formFilterSelect" class="form-select form-select-sm">
-                            <option value="all">すべて表示</option><option value="none">すべて無し</option><option value="regional">リージョンフォーム</option><option value="mega">メガシンカ</option><option value="gmax">キョダイマックス</option><option value="multi">複数該当</option>
-                        </select>
-                    </div>
-                    <div class="col-12 order-4 mt-2 d-flex align-items-center justify-content-end" style="height: 31px;">
-                        <!-- ★ 「★ 候補のみ表示」から★を削除 -->
-                        <label class="fw-bold text-secondary me-2 mb-0" style="font-size: 0.85rem; cursor: pointer; user-select: none;" for="showSavedOnly">候補のみ表示</label>
-                        <div class="form-check form-switch mb-0 p-0 m-0 d-flex align-items-center">
-                            <input class="form-check-input ms-0 mt-0" type="checkbox" id="showSavedOnly" style="cursor: pointer;">
-                        </div>
-                    </div>
-                </div>
+        <div class="chance-box"><label id="chanceLabel" class="chance-label"><input id="chanceToggle" type="checkbox"><span>チャンス状態 (1投目のみ)</span></label></div>
+        <div class="setting-line"><span>確定ライン:</span><select id="guaranteeSelect"><option value="3">3枚 (通常)</option><option value="2">2枚</option></select></div>
+        <p id="feedStatus"></p>
+
+        <div class="action-panel">
+          <p class="eyebrow">次の一手</p>
+          <p id="nextMove">計算中...</p>
+          <div id="detailCard" class="detail" hidden>
+            <div class="prob-line"><span class="prob-label">この回の捕獲確率:</span><span id="catchProb">0.0%</span></div>
+            <div><span class="route-label">想定ルート (通常成功・満腹なし進行時):</span><div id="route"></div></div>
+          </div>
+          <div id="resultArea" hidden>
+            <p class="help">実際の結果をタップ（所持数は自動で減ります）</p>
+            <div class="result-grid">
+              <button id="normalBtn" class="result-btn normal">通常</button>
+              <button id="bigBtn" class="result-btn big">大成功 (3倍)</button>
+              <button id="superBtn" class="result-btn super">超成功 (一発)</button>
+              <button id="fullBtn" class="result-btn full">満腹 (逃走)</button>
             </div>
-            <div class="table-responsive">
-                <table id="pokemonTable" class="table table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th style="width: 10%;" class="text-center">候補</th><th style="width: 8%;">No.</th><th style="width: 20%;">名前</th><th style="width: 12%;" class="text-center">タイプ</th><th style="width: 14%;" class="text-center">リージョン</th><th style="width: 11%;" class="text-center">メガ</th><th style="width: 13%;" class="text-center">キョダイ</th><th style="width: 12%;" class="text-center">点数</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+          </div>
+          <div id="fullMessage" class="message full-message fade-in" hidden><h3>満腹になりました</h3><p>今日の判定はここで終了です。<br>「次の出会いへ進む」を押してください。</p></div>
+          <div id="passMessage" class="message pass-message" hidden><h3>今日はここでストップ！</h3><p>無理をして投げるより、翌日に回す方がお得です。<br>「次の出会いへ進む」を押してください。</p></div>
+          <button id="undoBtn" class="undo-btn" hidden><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>1手戻る (誤タップ修正)</button>
         </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        const pokemonData = [{"no": 1, "name": "フシギダネ", "type": "くさ", "regional": "", "mega": "〇", "gmax": "〇", "score": 5}, {"no": 4, "name": "ヒトカゲ", "type": "ほのお", "regional": "", "mega": "〇", "gmax": "〇", "score": 5}, {"no": 7, "name": "ゼニガメ", "type": "みず", "regional": "", "mega": "〇", "gmax": "〇", "score": 5}, {"no": 10, "name": "キャタピー", "type": "むし", "regional": "", "mega": "", "gmax": "〇", "score": 8}, {"no": 19, "name": "コラッタ", "type": "ノーマル", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 23, "name": "アーボ", "type": "どく", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 25, "name": "ピカチュウ", "type": "でんき", "regional": "〇", "mega": "〇", "gmax": "〇", "score": 0}, {"no": 27, "name": "サンド", "type": "じめん", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 35, "name": "ピッピ", "type": "フェアリー", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 37, "name": "ロコン", "type": "ほのお", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 39, "name": "プリン", "type": "フェアリー", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 50, "name": "ディグダ", "type": "じめん", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 52, "name": "ニャース", "type": "ノーマル", "regional": "〇", "mega": "", "gmax": "〇", "score": 3}, {"no": 54, "name": "コダック", "type": "みず", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 56, "name": "マンキー", "type": "かくとう", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 58, "name": "ガーディ", "type": "ほのお", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 69, "name": "マダツボミ", "type": "くさ", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 74, "name": "イシツブテ", "type": "いわ", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 79, "name": "ヤドン", "type": "みず", "regional": "〇", "mega": "〇", "gmax": "", "score": 2}, {"no": 81, "name": "コイル", "type": "はがね", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 83, "name": "カモネギ", "type": "ひこう", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 84, "name": "ドードー", "type": "ひこう", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 92, "name": "ゴース", "type": "ゴースト", "regional": "", "mega": "〇", "gmax": "〇", "score": 5}, {"no": 95, "name": "イワーク", "type": "いわ", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 104, "name": "カラカラ", "type": "じめん", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 113, "name": "ラッキー", "type": "ノーマル", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 115, "name": "ガルーラ", "type": "ノーマル", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 122, "name": "バリヤード", "type": "エスパー", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 127, "name": "カイロス", "type": "むし", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 132, "name": "メタモン", "type": "ノーマル", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 133, "name": "イーブイ", "type": "ノーマル", "regional": "", "mega": "", "gmax": "〇", "score": 8}, {"no": 147, "name": "ミニリュウ", "type": "ドラゴン", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 151, "name": "ミュウ", "type": "エスパー", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 152, "name": "チコリータ", "type": "くさ", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 155, "name": "ヒノアラシ", "type": "ほのお", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 158, "name": "ワニノコ", "type": "みず", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 175, "name": "トゲピー", "type": "フェアリー", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 177, "name": "ネイティ", "type": "エスパー", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 179, "name": "メリープ", "type": "でんき", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 185, "name": "ウソッキー", "type": "いわ", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 194, "name": "ウパー", "type": "みず", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 198, "name": "ヤミカラス", "type": "あく", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 202, "name": "ソーナンス", "type": "エスパー", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 213, "name": "ツボツボ", "type": "むし", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 214, "name": "ヘラクロス", "type": "むし", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 215, "name": "ニューラ", "type": "あく", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 225, "name": "デリバード", "type": "ひこう", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 228, "name": "デルビル", "type": "あく", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 243, "name": "ライコウ", "type": "でんき", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 244, "name": "エンテイ", "type": "ほのお", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 245, "name": "スイクン", "type": "みず", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 246, "name": "ヨーギラス", "type": "いわ", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 252, "name": "キモリ", "type": "くさ", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 255, "name": "アチャモ", "type": "ほのお", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 258, "name": "ミズゴロウ", "type": "みず", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 280, "name": "ラルトス", "type": "エスパー", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 287, "name": "ナマケロ", "type": "ノーマル", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 302, "name": "ヤミラミ", "type": "あく", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 303, "name": "クチート", "type": "はがね", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 304, "name": "ココドラ", "type": "はがね", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 311, "name": "プラスル", "type": "でんき", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 312, "name": "マイナン", "type": "でんき", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 316, "name": "ゴクリン", "type": "どく", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 328, "name": "ナックラー", "type": "じめん", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 333, "name": "チルット", "type": "ひこう", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 353, "name": "カゲボウズ", "type": "ゴースト", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 359, "name": "アブソル", "type": "あく", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 363, "name": "タマザラシ", "type": "こおり", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 371, "name": "タツベイ", "type": "ドラゴン", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 380, "name": "ラティアス", "type": "ドラゴン", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 381, "name": "ラティオス", "type": "ドラゴン", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 387, "name": "ナエトル", "type": "くさ", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 390, "name": "ヒコザル", "type": "ほのお", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 393, "name": "ポッチャマ", "type": "みず", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 403, "name": "コリンク", "type": "でんき", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 425, "name": "フワンテ", "type": "ゴースト", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 442, "name": "ミカルゲ", "type": "あく", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 448, "name": "ルカリオ", "type": "かくとう", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 453, "name": "グレッグル", "type": "どく", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 459, "name": "ユキカブリ", "type": "こおり", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 488, "name": "クレセリア", "type": "エスパー", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 491, "name": "ダークライ", "type": "あく", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 517, "name": "ムンナ", "type": "エスパー", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 557, "name": "イシズマイ", "type": "むし", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 627, "name": "ワシボン", "type": "ひこう", "regional": "〇", "mega": "", "gmax": "", "score": 5}, {"no": 696, "name": "チゴラス", "type": "いわ", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 701, "name": "ルチャブル", "type": "ひこう", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 702, "name": "デデンネ", "type": "でんき", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 710, "name": "バケッチャ", "type": "ゴースト", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 714, "name": "オンバット", "type": "ドラゴン", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 736, "name": "アゴジムシ", "type": "むし", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 742, "name": "アブリー", "type": "フェアリー", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 759, "name": "ヌイコグマ", "type": "かくとう", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 764, "name": "キュワワー", "type": "フェアリー", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 777, "name": "トゲデマル", "type": "はがね", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 778, "name": "ミミッキュ", "type": "ゴースト", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 780, "name": "ジジーロン", "type": "ドラゴン", "regional": "", "mega": "〇", "gmax": "", "score": 7}, {"no": 845, "name": "ウッウ", "type": "ひこう", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 848, "name": "エレズン", "type": "どく", "regional": "", "mega": "", "gmax": "〇", "score": 8}, {"no": 906, "name": "ニャオハ", "type": "くさ", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 909, "name": "ホゲータ", "type": "ほのお", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 912, "name": "クワッス", "type": "みず", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 921, "name": "パモ", "type": "でんき", "regional": "", "mega": "", "gmax": "", "score": 10}, {"no": 974, "name": "アルクジラ", "type": "こおり", "regional": "", "mega": "", "gmax": "", "score": 10}];
-        let table;
+        <button id="nextEncounterBtn" class="next-encounter">次の出会いへ進む (残り回数-1)</button>
+      </section>
 
-        const LS_KEY = 'pokesleep_candy_candidates';
-        let rawSaved = localStorage.getItem(LS_KEY);
-        let savedData = {}; 
+      <section class="card expect-card">
+        <div><h2>残り期待捕獲数</h2><p>現在の在庫・残り出会い回数による期待値</p></div>
+        <div id="expectBox" class="expect-number"><span id="expectedTotal">計算中...</span><span class="unit">体</span></div>
+      </section>
 
-        if (rawSaved) {
-            try {
-                let parsed = JSON.parse(rawSaved);
-                if (Array.isArray(parsed)) {
-                    parsed.forEach(id => { savedData[id] = 3; });
-                    localStorage.setItem(LS_KEY, JSON.stringify(savedData));
-                } else {
-                    let needsMigration = false;
-                    for (let key in parsed) { if (parsed[key] > 5) needsMigration = true; }
-                    
-                    if (needsMigration) {
-                        for (let key in parsed) {
-                            let oldVal = parsed[key];
-                            if (oldVal <= 2) savedData[key] = 1;
-                            else if (oldVal <= 4) savedData[key] = 2;
-                            else if (oldVal === 5) savedData[key] = 3;
-                            else if (oldVal <= 7) savedData[key] = 4;
-                            else savedData[key] = 5;
-                        }
-                        localStorage.setItem(LS_KEY, JSON.stringify(savedData));
-                    } else {
-                        savedData = parsed;
-                    }
-                }
-            } catch(e) {
-                savedData = {};
-            }
+      <section class="card settings-card">
+        <div class="settings-head">
+          <h2>サブレ所持数・設定</h2>
+          <label class="toggle-label"><input id="premiumToggle" type="checkbox"><span id="premiumTrack" class="toggle"><span class="toggle-dot"></span></span><span id="premiumLabel">プレパス</span></label>
+        </div>
+        <div id="inputList" class="input-list"></div>
+        <div id="applyWrap" class="fade-in" hidden><button id="applyBtn" class="apply-btn">設定を適用して再計算</button></div>
+      </section>
+    </main>
+  </div>
+
+  <script id="solver-worker" type="text/plain">
+    'use strict';
+
+    self.onmessage = (event) => {
+      const msg = event.data || {};
+      if (msg.type !== 'solve') return;
+
+      const startedAt = performance.now();
+      try {
+        const context = makeContext({
+          premium: !!msg.premium,
+          guaranteedCount: msg.guaranteedCount,
+          maxEncounters: msg.state?.encounters,
+          inventory: msg.state?.inventory || {}
+        });
+        const result = solve(context, msg.state || {});
+        result.calcMs = performance.now() - startedAt;
+        self.postMessage({ type: 'result', requestId: msg.requestId, result });
+      } catch (error) {
+        self.postMessage({
+          type: 'error',
+          requestId: msg.requestId,
+          message: error && error.stack ? error.stack : String(error)
+        });
+      }
+    };
+
+    function makeContext(cfg) {
+      const premium = !!cfg.premium;
+      const guar = Math.max(1, Math.floor(Number(cfg.guaranteedCount) || 3));
+      const maxEnc = Math.max(0, Math.floor(Number(cfg.maxEncounters) || 0));
+      const values = { s6: 6, s5: 5, s4: premium ? 4 : 3, s3: 3, s1: 1 };
+      const ids = ['s6', 's5', 's4', 's3', 's1'];
+      const maxCounts = {};
+      const isInf = {};
+
+      for (const id of ids) {
+        const raw = cfg.inventory?.[id];
+        isInf[id] = raw === '∞';
+        if (isInf[id]) {
+          maxCounts[id] = 0;
+          continue;
         }
 
-        window.setPriority = function(no, priority, element, event) {
-            if (event) { event.preventDefault(); }
-            if (priority === 0) {
-                delete savedData[no];
-            } else {
-                savedData[no] = priority;
-            }
-            localStorage.setItem(LS_KEY, JSON.stringify(savedData));
-            
-            const tr = $(element).closest('tr');
-            if (tr.length > 0 && table) {
-                table.row(tr).invalidate().draw(false);
-            } else if (table) {
-                table.rows().invalidate().draw(false);
-            }
+        const n = Math.max(0, Math.floor(Number(raw) || 0));
+        if (id === 's4') {
+          // ボーナスサブレはUI上も1枚が上限で、次の出会いで1枚に戻る。
+          maxCounts[id] = Math.min(n, 1);
+        } else {
+          // 厳密な上限。1回の捕獲までに、この種類だけを通常成功で投げ続けても
+          // ceil(30 / value)枚で必ずゲージ30に到達する。
+          // 捕獲できる回数は残り出会い回数を超えないため、これを超える在庫は
+          // イベント中に物理的に消費できず、最適行動にも影響しない。
+          const horizonCap = maxEnc * Math.ceil(30 / values[id]);
+          maxCounts[id] = Math.min(n, horizonCap);
+        }
+      }
+
+      const radix = {
+        phase: guar + 1,
+        s6: isInf.s6 ? 1 : maxCounts.s6 + 1,
+        s5: isInf.s5 ? 1 : maxCounts.s5 + 1,
+        s4: 2,
+        s3: isInf.s3 ? 1 : maxCounts.s3 + 1,
+        s1: isInf.s1 ? 1 : maxCounts.s1 + 1,
+        enc: maxEnc + 1
+      };
+
+      // 通常の14回ケースではNumberの整数キーで安全に一意化できる。
+      // 極端に大きいユーザー入力だけ文字列キーへ自動フォールバックする。
+      let keySpace = 31 * radix.phase * 2;
+      keySpace *= radix.s6 * radix.s5 * radix.s4 * radix.s3 * radix.s1 * radix.enc;
+      const useNumericKey = Number.isSafeInteger(keySpace) && keySpace <= Number.MAX_SAFE_INTEGER;
+      const makeMemo = () => {
+        const DENSE_LIMIT = 10000000;
+        if (useNumericKey && keySpace <= DENSE_LIMIT) {
+          const ev = new Float64Array(keySpace);
+          const action = new Int8Array(keySpace);
+          action.fill(-128);
+          let memoSize = 0;
+          return {
+            getEV(k) { return action[k] === -128 ? undefined : ev[k]; },
+            getAction(k) { return action[k]; },
+            set(k, value, bestAction) {
+              if (action[k] === -128) memoSize++;
+              ev[k] = value; action[k] = bestAction;
+            },
+            get size() { return memoSize; }
+          };
+        }
+        const map = new Map();
+        return {
+          getEV(k) { const v = map.get(k); return v === undefined ? undefined : v[0]; },
+          getAction(k) { const v = map.get(k); return v === undefined ? -128 : v[1]; },
+          set(k, value, bestAction) { map.set(k, [value, bestAction]); },
+          get size() { return map.size; }
+        };
+      };
+
+      return {
+        premium,
+        guar,
+        maxEnc,
+        values,
+        isInf,
+        maxCounts,
+        radix,
+        useNumericKey,
+        memo: makeMemo()
+      };
+    }
+
+    function solve(ctx, input) {
+      const EPS = 1e-12;
+      const TARGET = 30;
+
+      const clampCount = (id, raw) => {
+        if (ctx.isInf[id]) return -1; // -1 = 無限
+        const n = Math.max(0, Math.floor(Number(raw) || 0));
+        return Math.min(n, ctx.maxCounts[id]);
+      };
+
+      const inv = input.inventory || {};
+      const startInv = {
+        s6: clampCount('s6', inv.s6),
+        s5: clampCount('s5', inv.s5),
+        s4: Math.max(0, Math.min(1, Math.floor(Number(inv.s4) || 0))),
+        s3: clampCount('s3', inv.s3),
+        s1: clampCount('s1', inv.s1)
+      };
+
+      const g = Math.max(0, Math.min(TARGET, Math.floor(Number(input.gauge) || 0)));
+      // cf >= guar では以後の満腹確率が常に同じなので、guar+1個の状態に厳密圧縮できる。
+      const phase = Math.max(0, Math.min(ctx.guar, Math.floor(Number(input.fedCount) || 0)));
+      const enc = Math.max(0, Math.min(ctx.maxEnc, Math.floor(Number(input.encounters) || 0)));
+      const chance = !!input.chance && phase === 0;
+
+      const actions = [
+        { id: 's1', val: 1, name: 'ポケ(1)' },
+        { id: 's3', val: 3, name: 'スーパー(3)' },
+        { id: 's4', val: ctx.values.s4, name: ctx.premium ? 'ボーナス+(4)' : 'ボーナス(3)' },
+        { id: 's5', val: 5, name: 'ハイパー(5)' },
+        { id: 's6', val: 6, name: 'ミュウツー(6)' }
+      ];
+
+      // index_logic_fixed.html と同じ同値時ルール。
+      const tieRank = (a) => a.val * 10 + (a.id === 's4' ? 0 : 1);
+      const encoded = (id, value) => ctx.isInf[id] ? 0 : value;
+
+      const getCount = (id, s6, s5, s4, s3, s1) => {
+        if (id === 's6') return s6;
+        if (id === 's5') return s5;
+        if (id === 's4') return s4;
+        if (id === 's3') return s3;
+        return s1;
+      };
+
+      const decrementForAction = (id, s6, s5, s4, s3, s1) => {
+        let ns6 = s6, ns5 = s5, ns4 = s4, ns3 = s3, ns1 = s1;
+        const count = getCount(id, s6, s5, s4, s3, s1);
+        if (count !== -1) {
+          if (id === 's6') ns6--;
+          else if (id === 's5') ns5--;
+          else if (id === 's4') ns4--;
+          else if (id === 's3') ns3--;
+          else ns1--;
+        }
+        return [ns6, ns5, ns4, ns3, ns1];
+      };
+
+      // PDF準拠ポリシーは「最初の3枚を必ず食べる」というPDF本文の前提にだけ適用する。
+      // UIの「2枚」はカスタム条件として計算できるが、PDF固有の行動ルールは強制しない。
+      const pdfStandardMode = ctx.guar === 3;
+
+      // PDF準拠の「確定取り切り」判定。
+      // 残っている確定給餌回数の中で、最悪ケース（通常成功）でもゲージ30へ
+      // 到達できるなら、その日のうちに取り切れる状態とみなす。
+      // チャンス1投目は超成功でなくても必ず3倍なので、最低獲得量を3倍として扱う。
+      const maxGuaranteedGain = (cp, cChance, s6, s5, s4, s3, s1) => {
+        const throwsLeft = Math.max(0, ctx.guar - cp);
+        if (throwsLeft <= 0) return 0;
+
+        const topNormalGain = (limit, cs6, cs5, cs4, cs3, cs1) => {
+          let total = 0;
+          let c6 = cs6, c5 = cs5, c4 = cs4, c3 = cs3, c1 = cs1;
+          for (let t = 0; t < limit; t++) {
+            let bestId = null;
+            let bestVal = -1;
+            if (c6 !== 0 && 6 > bestVal) { bestId = 's6'; bestVal = 6; }
+            if (c5 !== 0 && 5 > bestVal) { bestId = 's5'; bestVal = 5; }
+            if (c4 !== 0 && ctx.values.s4 > bestVal) { bestId = 's4'; bestVal = ctx.values.s4; }
+            if (c3 !== 0 && 3 > bestVal) { bestId = 's3'; bestVal = 3; }
+            if (c1 !== 0 && 1 > bestVal) { bestId = 's1'; bestVal = 1; }
+            if (bestId === null) break;
+
+            total += bestVal;
+            if (bestId === 's6' && c6 !== -1) c6--;
+            else if (bestId === 's5' && c5 !== -1) c5--;
+            else if (bestId === 's4' && c4 !== -1) c4--;
+            else if (bestId === 's3' && c3 !== -1) c3--;
+            else if (bestId === 's1' && c1 !== -1) c1--;
+          }
+          return total;
         };
 
-        function hiraToKana(str) { return str.replace(/[ぁ-ゖ]/g, function(match) { return String.fromCharCode(match.charCodeAt(0) + 0x60); }); }
-
-        $(document).ready(function() {
-            table = $('#pokemonTable').DataTable({
-                data: pokemonData,
-                dom: '<"top">rt<"bottom"i><"clear">',
-                paging: false,
-                columns: [
-                    { 
-                        data: 'no', 
-                        className: 'text-center', 
-                        orderable: true,
-                        render: function(data, type, row) { 
-                            const priority = savedData[data] || 0;
-                            
-                            if (type === 'sort' || type === 'type') {
-                                return priority === 0 ? 99 : priority;
-                            }
-                            
-                            let btnClass = 'rank-none';
-                            let icon = '＋';
-                            
-                            if (priority === 1) { btnClass = 'rank-s'; icon = 'S'; }
-                            else if (priority === 2) { btnClass = 'rank-a'; icon = 'A'; }
-                            else if (priority === 3) { btnClass = 'rank-b'; icon = 'B'; }
-                            else if (priority === 4) { btnClass = 'rank-c'; icon = 'C'; }
-                            else if (priority === 5) { btnClass = 'rank-d'; icon = 'D'; }
-                            
-                            let menuItems = `
-                                <li><a class="dropdown-item color-s fw-bold py-2" href="#" onclick="setPriority(${data}, 1, this, event)">S</a></li>
-                                <li><a class="dropdown-item color-a fw-bold py-2" href="#" onclick="setPriority(${data}, 2, this, event)">A</a></li>
-                                <li><a class="dropdown-item color-b fw-bold py-2" href="#" onclick="setPriority(${data}, 3, this, event)">B</a></li>
-                                <li><a class="dropdown-item color-c fw-bold py-2" href="#" onclick="setPriority(${data}, 4, this, event)">C</a></li>
-                                <li><a class="dropdown-item color-d fw-bold py-2" href="#" onclick="setPriority(${data}, 5, this, event)">D</a></li>
-                                <li><hr class="dropdown-divider m-1"></li>
-                                <li><a class="dropdown-item text-secondary py-2" href="#" onclick="setPriority(${data}, 0, this, event)">解除</a></li>
-                            `;
-
-                            return `
-                            <div class="dropdown">
-                                <button class="btn btn-sm ${btnClass} save-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-no="${data}">
-                                    ${icon}
-                                </button>
-                                <ul class="dropdown-menu shadow-sm dropdown-menu-start" style="min-width: 80px; font-size: 0.95rem; z-index: 1050; text-align: center;">
-                                    ${menuItems}
-                                </ul>
-                            </div>`;
-                        } 
-                    },
-                    { data: 'no', render: function(data) { return '<span class="text-secondary font-monospace">#' + String(data).padStart(3, '0') + '</span>'; } },
-                    { data: 'name', render: function(data) { return '<span class="fw-bold poke-name">' + data + '</span>'; } },
-                    { data: 'type', className: 'text-center', render: function(data) { return (!data || data === 'nan') ? '<span class="no-val">-</span>' : '<span class="type-badge type-' + data + '">' + data + '</span>'; } },
-                    { data: 'regional', className: 'text-center', render: function(data) { return data === '〇' ? '<span class="badge badge-regional">〇</span>' : '<span class="no-val">-</span>'; } },
-                    { data: 'mega', className: 'text-center', render: function(data) { return data === '〇' ? '<span class="badge badge-mega">〇</span>' : '<span class="no-val">-</span>'; } },
-                    { data: 'gmax', className: 'text-center', render: function(data) { return data === '〇' ? '<span class="badge badge-gmax">〇</span>' : '<span class="no-val">-</span>'; } },
-                    { 
-                        data: 'score', 
-                        className: 'text-center', 
-                        render: function(data, type) { 
-                            if (type === 'sort' || type === 'type') {
-                                return Number(data);
-                            }
-                            return '<span class="badge badge-score score-' + data + '">' + data + '点</span>'; 
-                        } 
-                    }
-                ],
-                language: { 
-                    url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/ja.json', 
-                    info: "_TOTAL_ 件表示",
-                    infoEmpty: "0 件表示",
-                    infoFiltered: "（全 _MAX_ 件より抽出）",
-                    zeroRecords: "一致するポケモンがいません"
-                },
-                order: [[1, 'asc']]
-            });
-
-            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                const pokeInfo = pokemonData[dataIndex];
-                const searchTerm = $('#customSearchInput').val().trim();
-                const typeFilter = $('#typeFilterSelect').val();
-                const formFilter = $('#formFilterSelect').val();
-                
-                let savedMatch = true;
-                if ($('#showSavedOnly').is(':checked')) {
-                    savedMatch = (savedData[pokeInfo.no] > 0);
-                }
-
-                let nameMatch = true;
-                if (searchTerm !== '') {
-                    const searchKana = hiraToKana(searchTerm);
-                    nameMatch = pokeInfo.name.startsWith(searchKana) || pokeInfo.name.startsWith(searchTerm);
-                }
-                
-                let typeMatch = true;
-                if (typeFilter !== 'all') { typeMatch = (pokeInfo.type === typeFilter); }
-                
-                let formMatch = true;
-                if (formFilter === 'none') { formMatch = (pokeInfo.regional !== '〇' && pokeInfo.mega !== '〇' && pokeInfo.gmax !== '〇'); }
-                else if (formFilter === 'regional') formMatch = (pokeInfo.regional === '〇');
-                else if (formFilter === 'mega') formMatch = (pokeInfo.mega === '〇');
-                else if (formFilter === 'gmax') formMatch = (pokeInfo.gmax === '〇');
-                else if (formFilter === 'multi') {
-                    let count = (pokeInfo.regional === '〇' ? 1 : 0) + (pokeInfo.mega === '〇' ? 1 : 0) + (pokeInfo.gmax === '〇' ? 1 : 0);
-                    formMatch = (count >= 2);
-                }
-                
-                return nameMatch && typeMatch && formMatch && savedMatch;
-            });
-
-            $('#customSearchInput').on('keyup input', function() { table.draw(); });
-            $('#typeFilterSelect, #formFilterSelect').on('change', function() { table.draw(); });
-            $('#showSavedOnly').on('change', function() { table.draw(); });
-        });
-    </script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('./sw.js').then(function(registration) {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function(err) {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
+        if (!(cChance && cp === 0)) {
+          return topNormalGain(throwsLeft, s6, s5, s4, s3, s1);
         }
-    </script>
+
+        let best = 0;
+        for (let ai = 0; ai < actions.length; ai++) {
+          const a = actions[ai];
+          const count = getCount(a.id, s6, s5, s4, s3, s1);
+          if (count === 0) continue;
+          const [ns6, ns5, ns4, ns3, ns1] = decrementForAction(a.id, s6, s5, s4, s3, s1);
+          const gain = a.val * 3 + topNormalGain(throwsLeft - 1, ns6, ns5, ns4, ns3, ns1);
+          if (gain > best) best = gain;
+        }
+        return best;
+      };
+
+      const canGuaranteeCatch = (cg, cp, cChance, s6, s5, s4, s3, s1) => {
+        if (cg >= TARGET) return true;
+        if (cp >= ctx.guar) return false;
+        return cg + maxGuaranteedGain(cp, cChance, s6, s5, s4, s3, s1) >= TARGET;
+      };
+
+      const countAvailable = (v) => v === -1 || v > 0;
+      const actionIndex = (id) => actions.findIndex(a => a.id === id);
+
+      // X記事の3タイプは固定ではなく、手持ちに応じて行き来する。
+      // 判定を一箇所に集約し、初手表・16〜18の温存比較・6余り目安で
+      // 同じ分類を使う。ハイパーが残っている間はハイパー型、
+      // ハイパーがなくスーパーを残り遭遇ごとに1枚以上回せるならスーパー型、
+      // それ未満の有限在庫ならポケ中心寄りとする。
+      const strategyType = (ce, s5, s3) => {
+        if (countAvailable(s5)) return 'hyper';
+        if (s3 === -1) return 'super';
+        return Math.max(0, s3) >= Math.max(1, ce) ? 'super' : 'poke';
+      };
+
+      // 「今この1投を投げても、最悪ケースで保証内100%捕獲を維持できるか」。
+      // 確定取り切り中は候補をこの条件だけに絞り、その中では残りイベント全体の
+      // 期待捕獲数をDPで比較する。PDF/X記事の表や小さい順は同期待値時のタイブレーク。
+      const actionPreservesGuaranteedFinish = (ai, cg, cp, cChance, s6, s5, s4, s3, s1) => {
+        const a = actions[ai];
+        const count = getCount(a.id, s6, s5, s4, s3, s1);
+        if (count === 0) return false;
+        const [ns6, ns5, ns4, ns3, ns1] = decrementForAction(a.id, s6, s5, s4, s3, s1);
+        const minMultiplier = (cChance && cp === 0) ? 3 : 1;
+        const ng = Math.min(TARGET, cg + a.val * minMultiplier);
+        if (ng >= TARGET) return true;
+        const np = Math.min(ctx.guar, cp + 1);
+        return canGuaranteeCatch(ng, np, false, ns6, ns5, ns4, ns3, ns1);
+      };
+
+      // PDFの表は「その日まだ1枚も投げていない・チャンスなし・ボーナス未使用」の表。
+      // その条件に一致する代表3タイプでは表の初手を優先し、途中結果は上の確率的再計画に戻す。
+      const pdfStartPreferredAction = (cg, cp, cChance, s6, s5, s4, s3, s1, ce) => {
+        if (!pdfStandardMode || cp !== 0 || cChance || s4 <= 0) return -1;
+        const rem = TARGET - cg;
+        if (rem <= 0 || rem > 18) return -1;
+
+        let id = null;
+        const type = strategyType(ce, s5, s3);
+
+        if (type === 'hyper') {
+          if (rem === 18) id = 's6';
+          else if (rem === 17) id = 's5';
+          else if (rem === 16 || rem === 15) id = 's5';
+          else if (rem >= 13 && rem <= 14) id = 's4';
+          else if (rem >= 11 && rem <= 12) id = 's3';
+          else if (rem >= 9 && rem <= 10) id = 's3';
+        } else if (type === 'super') {
+          if (rem >= 17 && rem <= 18) id = 's6';
+          else if (rem >= 14 && rem <= 16) id = 's4';
+          else if (rem >= 12 && rem <= 13) id = 's3';
+          else if (rem === 11) id = 's1';
+          else if (rem >= 9 && rem <= 10) id = 's3';
+          else if (rem >= 7 && rem <= 8) id = 's3';
+          else if (rem === 6) id = 's1';
+        } else if (type === 'poke') {
+          if (rem >= 16 && rem <= 18) id = 's6';
+          else if (rem >= 13 && rem <= 15) id = 's4';
+          else if (rem >= 9 && rem <= 12) id = 's1';
+          else if (rem >= 7 && rem <= 8) id = 's4';
+          // 最新版X記事の「残り6の小技」は、6を固定せず
+          // 1→1で大成功・超成功による6節約も含めてDP比較する。
+          else if (rem === 6) return -1;
+        }
+
+        if (!id) return -1;
+        const ai = actionIndex(id);
+        if (ai < 0 || getCount(id, s6, s5, s4, s3, s1) === 0) return -1;
+
+        // 在庫がPDF標準例と違う場合でも、通常成功後に100%取り切りを維持できる時だけ強制。
+        const a = actions[ai];
+        const [ns6, ns5, ns4, ns3, ns1] = decrementForAction(id, s6, s5, s4, s3, s1);
+        const ng = Math.min(TARGET, cg + a.val);
+        if (ng >= TARGET || canGuaranteeCatch(ng, 1, false, ns6, ns5, ns4, ns3, ns1)) return ai;
+        return -1;
+      };
+
+      // X記事の「6が余りそう」は厳密な境界ではなく目安。
+      // 分類は strategyType() と統一し、本文のざっくり式だけを使う。
+      // 閾値到達時も6を強制せず、残り19以上での「6禁止」を解除してDP比較に戻すだけ。
+      const s6SurplusThreshold = (ce, s5, s3) => {
+        const type = strategyType(ce, s5, s3);
+        if (type === 'poke') return Math.max(3, ce * 2);
+        return Math.max(3, ce + 3);
+      };
+
+      const isS6Surplus = (ce, s6, s5, s3) => {
+        if (s6 === -1) return true;
+        return s6 >= s6SurplusThreshold(ce, s5, s3);
+      };
+
+      const memoKey = (cg, cp, cChance, s6, s5, s4, s3, s1, ce) => {
+        if (!ctx.useNumericKey) {
+          return `${cg}|${cp}|${cChance ? 1 : 0}|${encoded('s6', s6)}|${encoded('s5', s5)}|${s4}|${encoded('s3', s3)}|${encoded('s1', s1)}|${ce}`;
+        }
+        let k = cg;
+        k = k * ctx.radix.phase + cp;
+        k = k * 2 + (cChance ? 1 : 0);
+        k = k * ctx.radix.s6 + encoded('s6', s6);
+        k = k * ctx.radix.s5 + encoded('s5', s5);
+        k = k * ctx.radix.s4 + s4;
+        k = k * ctx.radix.s3 + encoded('s3', s3);
+        k = k * ctx.radix.s1 + encoded('s1', s1);
+        k = k * ctx.radix.enc + ce;
+        return k;
+      };
+
+      const nextEncounterEV = (gCarry, s6, s5, s3, s1, ce) => {
+        if (ce <= 1) return 0;
+        // 次の出会いではボーナスサブレが1枚に戻り、チャンスを10%で再抽選。
+        return 0.1 * dp(gCarry, 0, 1, s6, s5, 1, s3, s1, ce - 1)
+             + 0.9 * dp(gCarry, 0, 0, s6, s5, 1, s3, s1, ce - 1);
+      };
+
+      // 現在遭遇の捕獲確率は、DPの主目的（イベント全体の期待捕獲数）とは分離して扱う。
+      // ただし期待値が同値の行動同士を比較する時だけ、ボーナスサブレ優先の判定に使う。
+      const catchMemo = new Map();
+      // 4 vs 3 の同値判定などで「この1手を固定した場合の当該遭遇捕獲率」を
+      // 同じ状態について何度も再計算しないための専用キャッシュ。
+      const forcedCatchMemo = new Map();
+
+      function policyAction(cg, cp, cChance, s6, s5, s4, s3, s1, ce) {
+        if (ce <= 0 || cg >= TARGET) return -1;
+        const key = memoKey(cg, cp, cChance, s6, s5, s4, s3, s1, ce);
+        dp(cg, cp, cChance, s6, s5, s4, s3, s1, ce);
+        return ctx.memo.getAction(key);
+      }
+
+      function policyCatchProb(cg, cp, cChance, s6, s5, s4, s3, s1, ce) {
+        if (cg >= TARGET) return 1;
+        if (ce <= 0) return 0;
+        const k = memoKey(cg, cp, cChance, s6, s5, s4, s3, s1, ce);
+        const cached = catchMemo.get(k);
+        if (cached !== undefined) return cached;
+        const ai = policyAction(cg, cp, cChance, s6, s5, s4, s3, s1, ce);
+        if (ai < 0) { catchMemo.set(k, 0); return 0; }
+        const a = actions[ai];
+        const [ns6, ns5, ns4, ns3, ns1] = decrementForAction(a.id, s6, s5, s4, s3, s1);
+        const np = Math.min(ctx.guar, cp + 1);
+        const afterEat = (ng) => {
+          const clamped = Math.min(TARGET, ng);
+          return clamped >= TARGET ? 1 : policyCatchProb(clamped, np, 0, ns6, ns5, ns4, ns3, ns1, ce);
+        };
+        let pEat;
+        if (cChance && cp === 0) pEat = 0.10 + 0.90 * afterEat(cg + a.val * 3);
+        else pEat = 0.02 + 0.08 * afterEat(cg + a.val * 3) + 0.90 * afterEat(cg + a.val);
+        const eatProb = cp >= ctx.guar ? 0.6 : 1.0;
+        const out = eatProb * pEat;
+        catchMemo.set(k, out);
+        return out;
+      }
+
+      const forcedActionCatchProb = (ai, cg, cp, cChance, s6, s5, s4, s3, s1, ce) => {
+        if (ai < 0 || cg >= TARGET || ce <= 0) return 0;
+        const stateKey = memoKey(cg, cp, cChance, s6, s5, s4, s3, s1, ce);
+        const forcedKey = `${stateKey}|${ai}`;
+        const cached = forcedCatchMemo.get(forcedKey);
+        if (cached !== undefined) return cached;
+        const a = actions[ai];
+        const [ns6, ns5, ns4, ns3, ns1] = decrementForAction(a.id, s6, s5, s4, s3, s1);
+        const np = Math.min(ctx.guar, cp + 1);
+        const afterEat = (ng) => {
+          const clamped = Math.min(TARGET, ng);
+          return clamped >= TARGET ? 1 : policyCatchProb(clamped, np, 0, ns6, ns5, ns4, ns3, ns1, ce);
+        };
+        let pEat;
+        if (cChance && cp === 0) pEat = 0.10 + 0.90 * afterEat(cg + a.val * 3);
+        else pEat = 0.02 + 0.08 * afterEat(cg + a.val * 3) + 0.90 * afterEat(cg + a.val);
+        const eatProb = cp >= ctx.guar ? 0.6 : 1.0;
+        const out = eatProb * pEat;
+        forcedCatchMemo.set(forcedKey, out);
+        return out;
+      };
+
+      function dp(cg, cp, cChance, s6, s5, s4, s3, s1, ce) {
+        if (ce <= 0) return 0;
+
+        if (cg >= TARGET) {
+          return 1 + nextEncounterEV(0, s6, s5, s3, s1, ce);
+        }
+
+        const key = memoKey(cg, cp, cChance, s6, s5, s4, s3, s1, ce);
+        const hit = ctx.memo.getEV(key);
+        if (hit !== undefined) return hit;
+
+        const passEV = nextEncounterEV(cg, s6, s5, s3, s1, ce);
+        const guaranteedFinish = pdfStandardMode
+          && canGuaranteeCatch(cg, cp, cChance, s6, s5, s4, s3, s1);
+
+        const remainingGauge = TARGET - cg;
+        const normalNonChance = !cChance;
+        const type = strategyType(ce, s5, s3);
+
+        // 最新版X.pdfの「保証が残り1枚」の意味に限定する。
+        // 以前のように「保証が残り1枚なら当日捕獲率を最大化」するのではなく、
+        // “その確定1枚だけで捕まえ切れるサブレがある”場合にだけ確定捕獲を優先する。
+        // （この場合は bestGuaranteedPlan 自体が1投完結ルートを返す。）
+        const oneGuaranteedLeftException = pdfStandardMode
+          && cp === ctx.guar - 1
+          && actions.some((a) => {
+            const count = getCount(a.id, s6, s5, s4, s3, s1);
+            if (count === 0) return false;
+            const guaranteedMult = (cChance && cp === 0) ? 3 : 1;
+            return cg + a.val * guaranteedMult >= TARGET;
+          });
+
+        // X記事で残り16〜18の温存例外が明示されているのはポケ中心寄り。
+        // 3タイプ自体は手持ちに応じて行き来するため、固定在庫名ではなく strategyType() の
+        // 柔軟な判定が 'poke' の時だけ「今100%で取り切る」対「6を温存する」をDP比較する。
+        // ハイパー／スーパー中心では記事の共通ルールどおり保証内の確定捕獲を優先する。
+        const allowEarlyPreserveComparison = pdfStandardMode
+          && guaranteedFinish
+          && type === 'poke'
+          && normalNonChance
+          && remainingGauge >= 16
+          && remainingGauge <= 18
+          && ce > 1
+          && !oneGuaranteedLeftException;
+        const mustFinishNow = guaranteedFinish && !allowEarlyPreserveComparison;
+
+        // 残り19以上では基本的に6を温存する。ただし最終遭遇や「6が余りそう」の
+        // 目安に達した時は“6禁止を解除”するだけに留め、6を強制はしない。
+        // 解除後は6を含む全候補をDPで比較する。
+        const inS6PreserveZone = pdfStandardMode
+          && normalNonChance
+          && remainingGauge >= 19;
+        const allowS6ByPdfException = inS6PreserveZone
+          && countAvailable(s6)
+          && (ce <= 1 || isS6Surplus(ce, s6, s5, s3));
+        const preserveS6 = inS6PreserveZone && !allowS6ByPdfException;
+
+        // PDF掲載表の開始条件に一致する時だけ、その表の初手を優先する。
+        const pdfPreferredAi = mustFinishNow
+          ? pdfStartPreferredAction(cg, cp, cChance, s6, s5, s4, s3, s1, ce)
+          : -1;
+
+        // 取り切りをハード制約にする状態だけ翌日送りを候補から外す。
+        // 残り16〜18の温存比較と、6余り目安到達後は通常のDP比較に戻す。
+        let bestEV = mustFinishNow ? -Infinity : passEV;
+        let bestAction = mustFinishNow ? -3 : -2;
+        const eatProb = cp >= ctx.guar ? 0.6 : 1.0;
+
+        for (let ai = 0; ai < actions.length; ai++) {
+          const a = actions[ai];
+          let count;
+          if (a.id === 's6') count = s6;
+          else if (a.id === 's5') count = s5;
+          else if (a.id === 's4') count = s4;
+          else if (a.id === 's3') count = s3;
+          else count = s1;
+          if (count === 0) continue;
+
+          let [ns6, ns5, ns4, ns3, ns1] = decrementForAction(a.id, s6, s5, s4, s3, s1);
+
+          const np = Math.min(ctx.guar, cp + 1);
+
+          if (preserveS6 && a.id === 's6') continue;
+
+          if (mustFinishNow
+              && !actionPreservesGuaranteedFinish(ai, cg, cp, cChance, s6, s5, s4, s3, s1)) {
+            continue;
+          }
+
+          const evAfterEat = (ng) => {
+            const clamped = Math.min(TARGET, ng);
+            if (clamped >= TARGET) {
+              return 1 + nextEncounterEV(0, ns6, ns5, ns3, ns1, ce);
+            }
+            return dp(clamped, np, 0, ns6, ns5, ns4, ns3, ns1, ce);
+          };
+
+          let eatEV;
+          if (cChance && cp === 0) {
+            eatEV = 0.10 * evAfterEat(TARGET)
+                  + 0.90 * evAfterEat(cg + a.val * 3);
+          } else {
+            eatEV = 0.02 * evAfterEat(TARGET)
+                  + 0.08 * evAfterEat(cg + a.val * 3)
+                  + 0.90 * evAfterEat(cg + a.val);
+          }
+
+          // 食べなかった場合はサブレ非消費でその出会いだけ終了。
+          const expectedValue = eatProb * eatEV + (1 - eatProb) * passEV;
+
+          if (expectedValue > bestEV + EPS) {
+            bestEV = expectedValue;
+            bestAction = ai;
+          } else if (Math.abs(expectedValue - bestEV) <= EPS) {
+            // 残り16〜18の比較で期待値が同値なら、記事の「基本は捕まえ切り」に合わせて
+            // 100%取り切りを維持する行動を優先する。それ以外はPDF表→小さい順で決める。
+            const currentKeepsGuarantee = allowEarlyPreserveComparison
+              && actionPreservesGuaranteedFinish(ai, cg, cp, cChance, s6, s5, s4, s3, s1);
+            if (bestAction === -2) {
+              if (currentKeepsGuarantee) {
+                bestEV = expectedValue;
+                bestAction = ai;
+              }
+            } else if (bestAction >= 0) {
+              const bestKeepsGuarantee = allowEarlyPreserveComparison
+                && actionPreservesGuaranteedFinish(bestAction, cg, cp, cChance, s6, s5, s4, s3, s1);
+              const currentIsPdf = pdfPreferredAi >= 0 && ai === pdfPreferredAi;
+              const bestIsPdf = pdfPreferredAi >= 0 && bestAction === pdfPreferredAi;
+              let betterTie;
+              if (currentKeepsGuarantee !== bestKeepsGuarantee) {
+                // 16〜18の温存比較では、まず記事どおり100%取り切り維持を最優先。
+                betterTie = currentKeepsGuarantee;
+              } else {
+                const bestA = actions[bestAction];
+                // プレミアム時の「ボーナス+(4) vs スーパー(3)」だけは特別扱い。
+                // イベント全体期待値と“この遭遇の捕獲確率”まで同値なら、
+                // PDF表の初手指定より上位でボーナス+(4)を先に消化する。
+                // これにより大成功時に有限のスーパー(3)等を温存しやすくする。
+                const isPremiumBonusVsSuper = ctx.premium && (
+                  (a.id === 's4' && bestA.id === 's3') ||
+                  (a.id === 's3' && bestA.id === 's4')
+                );
+                let decidedByBonus4 = false;
+                if (isPremiumBonusVsSuper) {
+                  // mustFinishNow 中の候補は、どちらも「残り保証内で通常成功だけでも100%捕獲」を
+                  // 維持する行動に既に限定済み。この場合は当該遭遇の捕獲率が双方100%なので、
+                  // 高コストな捕獲率再帰を走らせず、そのままボーナス+(4)を優先できる。
+                  if (mustFinishNow) {
+                    betterTie = a.id === 's4';
+                    decidedByBonus4 = true;
+                  } else {
+                    // 取り切りハード制約外では捕獲率が同じとは限らないため、従来どおり
+                    // 当該遭遇の捕獲率まで同値の時だけボーナス+(4)を優先する。
+                    const currentCatch = forcedActionCatchProb(ai, cg, cp, cChance, s6, s5, s4, s3, s1, ce);
+                    const bestCatch = forcedActionCatchProb(bestAction, cg, cp, cChance, s6, s5, s4, s3, s1, ce);
+                    if (Math.abs(currentCatch - bestCatch) <= 1e-12) {
+                      betterTie = a.id === 's4';
+                      decidedByBonus4 = true;
+                    }
+                  }
+                }
+
+                if (!decidedByBonus4) {
+                  if (currentIsPdf !== bestIsPdf) {
+                    betterTie = currentIsPdf;
+                  } else {
+                    // 通常の同値時はPDF表→小さい数字順。
+                    betterTie = tieRank(a) < tieRank(bestA);
+                  }
+                }
+              }
+              if (betterTie) {
+                bestEV = expectedValue;
+                bestAction = ai;
+              }
+            }
+          }
+        }
+
+        // mustFinishNow=true なら理論上必ず候補が1つ以上ある。万一入力の不整合等で
+        // 候補が見つからなかった場合だけ安全側で従来の翌日送りへフォールバックする。
+        if (bestAction === -3) {
+          bestEV = passEV;
+          bestAction = -2;
+        }
+
+        ctx.memo.set(key, bestEV, bestAction);
+        return bestEV;
+      }
+
+      // 捕獲済み／満腹直後は、現在の出会いを終了済みとして「次回以降」だけの期待値を返す。
+      // 残り出会い回数はUI上まだ現在回を含むため、ここで1回だけ減らす。
+      const encounterEnded = !!input.encounterEnded || g >= TARGET;
+      if (encounterEnded) {
+        let futureEV = 0;
+        if (enc > 1) {
+          const carryG = g >= TARGET ? 0 : g;
+          futureEV = 0.1 * dp(carryG, 0, 1, startInv.s6, startInv.s5, 1, startInv.s3, startInv.s1, enc - 1)
+                   + 0.9 * dp(carryG, 0, 0, startInv.s6, startInv.s5, 1, startInv.s3, startInv.s1, enc - 1);
+        }
+        return {
+          ev: futureEV,
+          catchProb: 0,
+          action: null,
+          route: [],
+          finalG: g,
+          memoStates: ctx.memo.size,
+          numericMemoKey: ctx.useNumericKey,
+          encounterEnded: true
+        };
+      }
+
+      const baseEV = dp(
+        g, phase, chance ? 1 : 0,
+        startInv.s6, startInv.s5, startInv.s4, startInv.s3, startInv.s1, enc
+      );
+      const baseAction = policyAction(
+        g, phase, chance ? 1 : 0,
+        startInv.s6, startInv.s5, startInv.s4, startInv.s3, startInv.s1, enc
+      );
+
+      // 「通常成功・満腹なし進行時」の表示用ルートもWorker内で作り、
+      // 同じメモを使い回してメインスレッド側の再計算をゼロにする。
+      const route = [];
+      let rg = g;
+      let rp = phase;
+      let rChance = chance;
+      let rs6 = startInv.s6, rs5 = startInv.s5, rs4 = startInv.s4, rs3 = startInv.s3, rs1 = startInv.s1;
+
+      for (let guard = 0; rg < TARGET && guard < 40; guard++) {
+        const ai = policyAction(rg, rp, rChance ? 1 : 0, rs6, rs5, rs4, rs3, rs1, enc);
+        if (ai < 0) break;
+        const a = actions[ai];
+        route.push(a.name);
+
+        if (a.id === 's6' && rs6 !== -1) rs6--;
+        else if (a.id === 's5' && rs5 !== -1) rs5--;
+        else if (a.id === 's4' && rs4 !== -1) rs4--;
+        else if (a.id === 's3' && rs3 !== -1) rs3--;
+        else if (a.id === 's1' && rs1 !== -1) rs1--;
+
+        rg += a.val * (rChance ? 3 : 1);
+        rp = Math.min(ctx.guar, rp + 1);
+        rChance = false;
+      }
+
+      let action = null;
+      if (baseAction >= 0) action = actions[baseAction];
+      else if (baseAction === -2) action = { id: 'pass', val: 0, name: '➔ 翌日へ (ストップ)' };
+
+      return {
+        ev: baseEV,
+        catchProb: policyCatchProb(g, phase, chance ? 1 : 0, startInv.s6, startInv.s5, startInv.s4, startInv.s3, startInv.s1, enc),
+        action,
+        route,
+        finalG: rg,
+        memoStates: ctx.memo.size,
+        numericMemoKey: ctx.useNumericKey
+      };
+    }
+  </script>
+  <script>
+  'use strict';
+  (() => {
+    const DEFAULT_INV = { s6:10, s5:10, s4:1, s3:0, s1:'∞', encounters:14 };
+    const load = (key, fallback) => { try { const v=localStorage.getItem(key); return v===null ? fallback : JSON.parse(v); } catch { return fallback; } };
+    const save = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} };
+    const clone = (v) => JSON.parse(JSON.stringify(v));
+
+    const state = {
+      inventory: load('mewtwo_inventory', DEFAULT_INV),
+      formData: null,
+      gauge: load('mewtwo_gauge', 0),
+      isChance: load('mewtwo_isChance', false),
+      fedCount: load('mewtwo_fedCount', 0),
+      guaranteedCount: load('mewtwo_guaranteedCount', 3),
+      isFull: load('mewtwo_isFull', false),
+      history: load('mewtwo_history', []),
+      isPremium: load('mewtwo_isPremium', true),
+      engine: { isCalculating:false, bestMove:{type:'計算中...',id:null,prob:0}, expectedTotal:'計算中...', routeData:{route:[],finalG:0} }
+    };
+    state.formData = clone(state.inventory);
+
+    const $ = (id) => document.getElementById(id);
+    const els = Object.fromEntries(['gaugeInput','progressBar','resetGauge','chanceLabel','chanceToggle','guaranteeSelect','feedStatus','nextMove','detailCard','catchProb','route','resultArea','normalBtn','bigBtn','superBtn','fullBtn','fullMessage','passMessage','undoBtn','nextEncounterBtn','expectedTotal','expectBox','premiumToggle','premiumTrack','premiumLabel','inputList','applyWrap','applyBtn'].map(id=>[id,$(id)]));
+
+    const ROWS = [
+      {id:'s6', label:()=> 'ミュウツーサブレ (6)', inf:false},
+      {id:'s5', label:()=> 'ハイパーサブレ (5)', inf:false},
+      {id:'s4', label:()=> state.isPremium ? 'ボーナスサブレ+ (4)' : 'ボーナスサブレ (3)', inf:false, max:1},
+      {id:'s3', label:()=> 'スーパーサブレ (3)', inf:true},
+      {id:'s1', label:()=> 'ポケサブレ (1)', inf:true},
+      {id:'encounters', label:()=> '残り出会い回数', inf:false}
+    ];
+
+    function buildRows() {
+      els.inputList.innerHTML='';
+      for (const row of ROWS) {
+        const wrap=document.createElement('div'); wrap.className='input-row'; wrap.dataset.id=row.id;
+        wrap.innerHTML=`<span class="input-label"></span><div class="input-controls"><div class="inf-slot">${row.inf?'<button class="inf-btn" type="button">∞</button>':''}</div><div class="stepper"><button class="step-btn down" type="button">−</button><input class="count-input" inputmode="numeric" min="0" ${row.max!==undefined?`max="${row.max}"`:''}><button class="step-btn up" type="button">＋</button></div></div>`;
+        const input=wrap.querySelector('.count-input'); input.type='number';
+        wrap.querySelector('.down').addEventListener('click',()=>stepRow(row,-1));
+        wrap.querySelector('.up').addEventListener('click',()=>stepRow(row,1));
+        input.addEventListener('input',()=>changeForm(row,input.value));
+        if(row.inf) wrap.querySelector('.inf-btn').addEventListener('click',()=>changeForm(row,state.formData[row.id]==='∞'?'0':'∞'));
+        els.inputList.appendChild(wrap);
+      }
+    }
+
+    function changeForm(row, value) {
+      if (value==='∞' && row.inf) state.formData[row.id]='∞';
+      else if (value==='') state.formData[row.id]='';
+      else {
+        let n=parseInt(String(value).replace(/^0+(?=\d)/,''),10); if(!Number.isFinite(n)||n<0)n=0; if(row.max!==undefined)n=Math.min(row.max,n); state.formData[row.id]=n;
+      }
+      render();
+    }
+    function stepRow(row, delta) {
+      const v=state.formData[row.id]; if(v==='∞') return;
+      let n=v===''?0:(parseInt(v,10)||0); n=Math.max(0,n+delta); if(row.max!==undefined)n=Math.min(row.max,n); state.formData[row.id]=n; render();
+    }
+    function setStateKey(key,value,storageKey){ state[key]=value; if(storageKey) save(storageKey,value); }
+    const actualGauge=()=> state.gauge===''?0:(Number(state.gauge)||0);
+    const modified=()=> JSON.stringify(state.inventory)!==JSON.stringify(state.formData);
+
+    let worker=null, workerUrl=null, requestId=0;
+    function stopWorker(){ if(worker){worker.terminate();worker=null;} if(workerUrl){URL.revokeObjectURL(workerUrl);workerUrl=null;} }
+    function recalc(){
+      const rid=++requestId; stopWorker();
+      const enc=Number(state.inventory.encounters)||0;
+      if(enc<=0){ state.engine={isCalculating:false,bestMove:{type:'完了',id:null,prob:1},expectedTotal:'0.00',routeData:{route:[],finalG:actualGauge()}}; render(); return; }
+      state.engine={...state.engine,isCalculating:true,bestMove:{type:'計算中...',id:null,prob:0}}; render();
+      const source=$('solver-worker').textContent;
+      workerUrl=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));
+      worker=new Worker(workerUrl);
+      worker.onmessage=(e)=>{
+        if(rid!==requestId)return; const data=e.data||{};
+        if(data.type==='error'){ console.error(data.message||'Worker calculation error'); state.engine={isCalculating:false,bestMove:{type:'エラー',id:null,prob:0},expectedTotal:'0.00',routeData:{route:[],finalG:actualGauge()}}; stopWorker(); render(); return; }
+        const r=data.result;
+        let best;
+        if(state.isFull) best={type:'満腹 (逃走)',id:null,prob:0};
+        else if(actualGauge()>=30) best={type:'完了',id:null,prob:1};
+        else best=r.action?{type:r.action.name,id:r.action.id,prob:r.catchProb}:{type:'➔ 翌日へ (ストップ)',id:'pass',prob:0};
+        state.engine={isCalculating:false,bestMove:best,expectedTotal:Number(r.ev).toFixed(2),routeData:{route:r.route||[],finalG:r.finalG}};
+        stopWorker(); render();
+      };
+      worker.onerror=(e)=>{ if(rid!==requestId)return; console.error(e.message||e); state.engine={isCalculating:false,bestMove:{type:'エラー',id:null,prob:0},expectedTotal:'0.00',routeData:{route:[],finalG:actualGauge()}}; stopWorker(); render(); };
+      worker.postMessage({type:'solve',requestId:rid,premium:state.isPremium,guaranteedCount:Number(state.guaranteedCount)||3,state:{gauge:actualGauge(),fedCount:Number(state.fedCount)||0,chance:!!state.isChance,encounters:enc,inventory:state.inventory,encounterEnded:state.isFull||actualGauge()>=30}});
+    }
+
+    function renderRoute(){
+      els.route.innerHTML=''; const arr=state.engine.routeData.route||[];
+      arr.forEach((step,i)=>{ const s=document.createElement('span');s.className='route-step';s.textContent=step;els.route.appendChild(s); if(i<arr.length-1){const a=document.createElement('span');a.className='route-arrow';a.textContent='➔';els.route.appendChild(a);} });
+      const end=document.createElement('span');
+      if(state.engine.routeData.finalG>=30){end.className='route-get';end.textContent='GET!';} else {end.className='route-next';end.textContent='➔ 翌日へ';}
+      els.route.appendChild(end);
+    }
+
+    function render(){
+      const g=actualGauge(), calc=state.engine.isCalculating;
+      els.gaugeInput.value=state.gauge;
+      els.progressBar.style.width=`${Math.min(30,g)/30*100}%`;
+      const chanceDisabled=state.fedCount>0||g>=30||state.isFull||calc;
+      els.chanceToggle.checked=!!state.isChance; els.chanceToggle.disabled=chanceDisabled; els.chanceLabel.classList.toggle('disabled',chanceDisabled);
+      els.guaranteeSelect.value=String(state.guaranteedCount); els.guaranteeSelect.disabled=state.isFull||calc;
+      els.feedStatus.textContent=`現在 ${Number(state.fedCount)+1} 枚目（${state.fedCount>=state.guaranteedCount?'⚠️満腹リスクあり':'✅確定ライン'}）`;
+      els.nextMove.textContent=state.isFull?'満腹 (逃走)':state.engine.bestMove.type; els.nextMove.classList.toggle('dim',calc);
+      const actionable=!state.isFull&&state.engine.bestMove.type!=='完了'&&state.engine.bestMove.id&&state.engine.bestMove.id!=='pass';
+      els.detailCard.hidden=!actionable; els.resultArea.hidden=!actionable;
+      els.detailCard.classList.toggle('dim',calc); els.catchProb.textContent=`${(Number(state.engine.bestMove.prob)||0)*100>=0?((Number(state.engine.bestMove.prob)||0)*100).toFixed(1):'0.0'}%`; renderRoute();
+      for(const b of [els.normalBtn,els.bigBtn,els.superBtn]){b.disabled=calc;b.classList.toggle('disabled',calc);b.classList.toggle('wait',calc);}
+      const fullDisabled=calc||state.fedCount<state.guaranteedCount; els.fullBtn.disabled=fullDisabled; els.fullBtn.classList.toggle('disabled',fullDisabled); els.fullBtn.classList.toggle('wait',calc);
+      els.fullMessage.hidden=!state.isFull; els.passMessage.hidden=state.isFull||state.engine.bestMove.id!=='pass';
+      els.undoBtn.hidden=state.history.length===0; els.undoBtn.disabled=calc; els.undoBtn.classList.toggle('disabled',calc); els.undoBtn.classList.toggle('wait',calc);
+      els.nextEncounterBtn.disabled=calc; els.nextEncounterBtn.classList.toggle('disabled',calc); els.nextEncounterBtn.classList.toggle('wait',calc);
+      els.expectedTotal.textContent=state.engine.expectedTotal; els.expectBox.classList.toggle('dim',calc);
+      els.premiumToggle.checked=!!state.isPremium; els.premiumToggle.disabled=calc; els.premiumTrack.classList.toggle('on',state.isPremium); els.premiumLabel.classList.toggle('on',state.isPremium);
+      for(const row of ROWS){ const wrap=els.inputList.querySelector(`[data-id="${row.id}"]`); if(!wrap)continue; wrap.querySelector('.input-label').textContent=row.label(); const input=wrap.querySelector('.count-input'); const v=state.formData[row.id]; input.type=v==='∞'?'text':'number'; input.readOnly=v==='∞'; input.value=v==='∞'?'∞':v; const down=wrap.querySelector('.down'),up=wrap.querySelector('.up'); const n=v===''?0:(parseInt(v,10)||0); down.disabled=v==='∞'||n<=0; up.disabled=v==='∞'||(row.max!==undefined&&n>=row.max); }
+      els.applyWrap.hidden=!modified(); els.applyBtn.disabled=calc; els.applyBtn.classList.toggle('disabled',calc); els.applyBtn.classList.toggle('wait',calc);
+    }
+
+    function pushHistory(){ state.history=[...state.history,{gauge:state.gauge,fedCount:state.fedCount,isChance:state.isChance,isFull:state.isFull,inventory:clone(state.inventory),formData:clone(state.formData)}]; save('mewtwo_history',state.history); }
+    function handleThrow(multiplier){
+      const id=state.engine.bestMove.id; if(!id||id==='pass'||state.engine.isCalculating)return; pushHistory();
+      if(multiplier===0){ setStateKey('isFull',true,'mewtwo_isFull'); recalc(); return; }
+      let m=multiplier; if(state.isChance&&multiplier===1)m=3;
+      const val=id==='s6'?6:id==='s5'?5:id==='s4'?(state.isPremium?4:3):id==='s3'?3:1; const added=m===30?30:val*m;
+      if(state.inventory[id]!=='∞'){ const next=Math.max(0,(Number(state.inventory[id])||0)-1); state.inventory={...state.inventory,[id]:next}; state.formData={...state.formData,[id]:next}; save('mewtwo_inventory',state.inventory); }
+      setStateKey('gauge',Math.min(30,actualGauge()+added),'mewtwo_gauge'); setStateKey('fedCount',Number(state.fedCount)+1,'mewtwo_fedCount'); setStateKey('isChance',false,'mewtwo_isChance'); recalc();
+    }
+    function undo(){ if(!state.history.length)return; const last=state.history[state.history.length-1]; state.history=state.history.slice(0,-1); save('mewtwo_history',state.history); state.gauge=last.gauge;state.fedCount=last.fedCount;state.isChance=last.isChance;state.isFull=!!last.isFull;state.inventory=last.inventory;state.formData=last.formData; save('mewtwo_gauge',state.gauge);save('mewtwo_fedCount',state.fedCount);save('mewtwo_isChance',state.isChance);save('mewtwo_isFull',state.isFull);save('mewtwo_inventory',state.inventory);recalc(); }
+    function nextEncounter(){ if(actualGauge()>=30){state.gauge=0;save('mewtwo_gauge',0);} state.fedCount=0;state.isChance=false;state.isFull=false;state.history=[]; save('mewtwo_fedCount',0);save('mewtwo_isChance',false);save('mewtwo_isFull',false);save('mewtwo_history',[]); const next={...state.inventory};let e=parseInt(next.encounters,10)||0;if(e>0)next.encounters=e-1;next.s4=1;state.inventory=next;state.formData=clone(next);save('mewtwo_inventory',next);recalc(); }
+
+    buildRows();
+    els.resetGauge.addEventListener('click',()=>{ if(confirm('フレンドポイントと食べた枚数を0にリセットしますか？')){state.gauge=0;state.fedCount=0;state.isChance=false;state.isFull=false;state.history=[];save('mewtwo_gauge',0);save('mewtwo_fedCount',0);save('mewtwo_isChance',false);save('mewtwo_isFull',false);save('mewtwo_history',[]);recalc();} });
+    els.gaugeInput.addEventListener('input',e=>{const v=e.target.value;if(v==='')state.gauge='';else state.gauge=Math.min(30,Math.max(0,parseInt(v,10)||0));state.history=[];state.isFull=false;save('mewtwo_gauge',state.gauge);save('mewtwo_history',[]);save('mewtwo_isFull',false);recalc();});
+    els.chanceToggle.addEventListener('change',e=>{state.isChance=e.target.checked;save('mewtwo_isChance',state.isChance);recalc();});
+    els.guaranteeSelect.addEventListener('change',e=>{state.guaranteedCount=Number(e.target.value);save('mewtwo_guaranteedCount',state.guaranteedCount);recalc();});
+    els.premiumToggle.addEventListener('change',e=>{state.isPremium=e.target.checked;save('mewtwo_isPremium',state.isPremium);render();recalc();});
+    els.normalBtn.addEventListener('click',()=>handleThrow(1)); els.bigBtn.addEventListener('click',()=>handleThrow(3)); els.superBtn.addEventListener('click',()=>handleThrow(30)); els.fullBtn.addEventListener('click',()=>handleThrow(0));
+    els.undoBtn.addEventListener('click',undo); els.nextEncounterBtn.addEventListener('click',nextEncounter);
+    els.applyBtn.addEventListener('click',()=>{const clean={...state.formData};for(const k of ['s6','s5','s4','s3','s1','encounters'])if(clean[k]==='')clean[k]=0;state.inventory=clean;state.formData=clone(clean);save('mewtwo_inventory',clean);recalc();});
+    window.addEventListener('beforeunload',stopWorker);
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+      });
+    }
+    render(); recalc();
+  })();
+  </script>
 </body>
 </html>

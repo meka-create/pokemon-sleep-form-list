@@ -1,44 +1,60 @@
-const CACHE_NAME = 'pokesleep-cache-v1786709921';
-const urlsToCache = [
+const CACHE_NAME = 'mewtwo-sable-opt-v1';
+const APP_SHELL = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.webmanifest',
+  './ogp-card.png',
+  './icons/favicon-32.png',
+  './icons/apple-touch-icon.png',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+      .then((cache) => cache.addAll(APP_SHELL))
+      .then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
+      .then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET') return;
+
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', copy));
+          return response;
+        })
+        .catch(() => caches.match('./index.html').then((cached) => cached || caches.match('./')))
+    );
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request).then(response => {
-      return caches.open(CACHE_NAME).then(cache => {
-        cache.put(event.request, response.clone());
+    caches.match(request).then((cached) => {
+      if (cached) return cached;
+      return fetch(request).then((response) => {
+        if (!response || response.status !== 200 || response.type !== 'basic') return response;
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
         return response;
       });
-    }).catch(() => {
-      return caches.match(event.request);
     })
   );
 });
